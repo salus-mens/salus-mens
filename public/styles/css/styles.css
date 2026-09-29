@@ -1,23 +1,41 @@
+/* --- ELIMINAR SCROLLS SIN ALTERAR TU FORMATO --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Oculta permanentemente las barras de scroll horizontal y vertical */
+}
+
+
 /* 1. Contenedor principal con el tono Teal Mist (#6EA89E) adaptado a cristal */
 nav {
-    display: flex;
-    justify-content: space-between; /* Separa el logo a la izquierda y el menú a la derecha */
-    align-items: center;           /* Centra verticalmente los elementos */
-    padding: 0.2rem 1.25rem;            /* Margen interno elegante */
-    
-    /* Base Teal Mist con un 65% de opacidad para el efecto ventana */
-    background: rgba(168, 206, 199, 0.65); 
-    
-    /* Efecto esmerilado de vidrio */
-    backdrop-filter: blur(15px);   
-    -webkit-backdrop-filter: blur(15px);
-    
-    /* Borde sutil usando el tono claro Soft Mint (#CFE5D5) muy transparente */
-    border-bottom: 1px solid rgba(207, 229, 213, 0.3); 
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-
-    border-radius:0.6rem 0.6rem 0.6rem 0.6rem; /* Bordes redondeados para un look moderno */
+  position: absolute;            /* Flota sobre el fondo sin empujarlo */
+  top: 0.8rem;                   /* Espacio hacia el borde superior */
+  left: 1.25rem;                 /* Anclaje estricto en el lado izquierdo */
+  right: 1.25rem;                /* Anclaje estricto en el lado derecho */
+  
+  display: flex;
+  justify-content: space-between; /* Separa el logo a la izquierda y el menú a la derecha */
+  align-items: center;           /* Centra verticalmente los elementos */
+  padding: 0.2rem 1.25rem;       /* Margen interno elegante */
+  
+  /* Base Teal Mist con un 65% de opacidad para el efecto ventana */
+  background: rgba(168, 206, 199, 0.65);
+  
+  /* Efecto esmerilado de vidrio */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  
+  /* Borde sutil usando el tono claro Soft Mint (#CFE5D5) muy transparente */
+  border-bottom: 1px solid rgba(207, 229, 213, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  
+  border-radius: 0.6rem;
+  z-index: 10;                   /* Asegura que siempre quede por encima de todo */
 }
+
+
 
 /* 2. Control del tamaño del logo */
 .logo-container img {
@@ -105,7 +123,7 @@ nav ul li a:hover {
   font-size: 1.25rem;            /* Tamaño legible y adaptable */
   color: #011a15;                /* Un verde oscuro elegante que combina con tu diseño */
   font-weight: 1000;
-  font-style: atma;            /* Formato clásico de cursiva para citas */
+  font-style: italic;            /* Formato clásico de cursiva para citas */
   text-align: center;
   line-height: 1.4;
   text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6); /* Sombra blanca sutil para leerse bien sobre el fondo */
