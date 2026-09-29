@@ -1,0 +1,127 @@
+/* 1. Contenedor principal con el tono Teal Mist (#6EA89E) adaptado a cristal */
+nav {
+    display: flex;
+    justify-content: space-between; /* Separa el logo a la izquierda y el menú a la derecha */
+    align-items: center;           /* Centra verticalmente los elementos */
+    padding: 0.2rem 1.25rem;            /* Margen interno elegante */
+    
+    /* Base Teal Mist con un 65% de opacidad para el efecto ventana */
+    background: rgba(168, 206, 199, 0.65); 
+    
+    /* Efecto esmerilado de vidrio */
+    backdrop-filter: blur(15px);   
+    -webkit-backdrop-filter: blur(15px);
+    
+    /* Borde sutil usando el tono claro Soft Mint (#CFE5D5) muy transparente */
+    border-bottom: 1px solid rgba(207, 229, 213, 0.3); 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    border-radius:0.6rem 0.6rem 0.6rem 0.6rem; /* Bordes redondeados para un look moderno */
+}
+
+/* 2. Control del tamaño del logo */
+.logo-container img {
+    height: auto;                 
+    width: 100%;
+    max-width: 2rem;
+    display: block;
+    animation: giroHorizontal 10s linear infinite; 
+}
+
+/* 2. Definimos los pasos de la animación (Eje Y = Horizontal) */
+@keyframes giroHorizontal {
+    0% {
+        transform: rotateY(0deg);
+    }
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* 3. Lista horizontal para los enlaces (li) */
+nav ul {
+    display: flex;                 /* Los alinea horizontalmente */
+    list-style: none;              /* Quita los puntos decorativos */
+    gap: 1.5rem;                     /* Separación uniforme entre pestañas */
+    margin: 0;
+    padding: 0;
+}
+
+/* 4. Estilos de texto (Siguiendo tu preferencia de fuentes blancas) */
+nav ul li a {
+    text-decoration: none;         /* Quita el subrayado por defecto */
+    color: #ffffff;                /* Texto blanco puro para máxima legibilidad */
+    font-weight: 200;              /* Un poco más grueso para resaltar en tonos pastel */
+    font-family: sans-serif;
+    transition: all 0.3s ease;     /* Transición suave para animaciones */
+}
+
+/* Efecto Hover: Al pasar el cursor, brilla con el tono Soft Mint (#CFE5D5) */
+nav ul li a:hover {
+    color: #7f9b91;         
+    text-shadow: 0 0 0.55rem rgba(207, 229, 213, 0.6); /* Destello sutil tipo cristal */
+    font-size:1,15rem;
+}
+
+/* FONFO-------------------------------------------------------------------------------------*/
+
+.contenedor-fondo {
+    position: relative;
+    width: 100vw;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    overflow: hidden; /* Oculta cualquier desbordamiento */
+    
+}
+
+/* Esta es la regla clave para la imagen que va detrás */
+.contenedor-fondo > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;             /* Cubre toda la pantalla sin deformar la imagen */
+  object-position: center;       /* Mantiene el centro de la foto siempre visible */
+  z-index: -1;                   /* La manda al fondo, detrás de los textos */
+}
+
+.img-encima {
+  position: absolute;
+  top: 25%;                      /* La baja un poco para que no choque con el nav */
+  left: 50%;                     /* La posiciona exactamente en el centro horizontal */
+  transform: translate(-50%, -50%); /* Truco clave: compensa su propio eje para centrado perfecto */
+  
+  width: 100%;                    /* En pantallas pequeñas ocupará la mayor parte del ancho */
+  max-width: 40rem;              /* Límite máximo para que no se vea gigante en monitores */
+  height: auto;                  /* Mantiene la proporción original sin deformar las letras */
+  
+  z-index: 2;                    /* Se asegura de quedar por encima del fondo */
+}
+
+/* Estilo general de la cita */
+.cita-frase {
+  margin-top: 28rem;            /* Separa la frase del título verde */
+  font-family: 'sans-serif';
+  font-size: 1.25rem;            /* Tamaño legible y adaptable */
+  color: #011a15;                /* Un verde oscuro elegante que combina con tu diseño */
+  font-weight: 1000;
+  font-style: atma;            /* Formato clásico de cursiva para citas */
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6); /* Sombra blanca sutil para leerse bien sobre el fondo */
+}
+
+/* Estilo específico para el autor (- A. EINSTEIN) */
+.cita-frase span {
+  display: block;                /* Salto de línea para el autor */
+  margin-top: 0.5rem;
+  font-size: 0.95rem;            /* Un poco más pequeño que la frase */
+  font-weight: 600;              /* Resaltado en negrita sutil */
+  font-style: normal;            /* Quita la cursiva solo al nombre */
+  letter-spacing: 1px;           /* Espaciado elegante entre letras */
+}
+
+
+
+
+
