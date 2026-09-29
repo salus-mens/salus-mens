@@ -69,7 +69,7 @@ nav ul {
 nav ul li a {
     text-decoration: none;         /* Quita el subrayado por defecto */
     color: #ffffff;                /* Texto blanco puro para máxima legibilidad */
-    font-weight: 200;              /* Un poco más grueso para resaltar en tonos pastel */
+    font-weight: 70;              /* Un poco más grueso para resaltar en tonos pastel */
     font-family: sans-serif;
     transition: all 0.3s ease;     /* Transición suave para animaciones */
 }
@@ -139,6 +139,51 @@ nav ul li a:hover {
   letter-spacing: 1px;           /* Espaciado elegante entre letras */
 }
 
+/* --- ADAPTACIÓN RESPONSIVE EXCLUSIVA PARA CELULARES --- */
+/* --- ADAPTACIÓN RESPONSIVE DEFINITIVA PARA MÓVILES --- */
+@media (max-width: 768px) {
+  /* Mantiene el logo y el menú alineados en la misma fila */
+  nav {
+    flex-direction: row;         /* Fuerza a que sigan en la misma línea */
+    flex-wrap: nowrap;           /* Evita que el logo o la lista salten abajo */
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;                 /* Espacio mínimo de separación entre el logo y los textos */
+    padding: 0.4rem 0.8rem;      /* Reducimos el padding lateral para ganar espacio */
+    top: 0.6rem;
+    left: 0.8rem;
+    right: 0.8rem;
+  }
+
+  /* Reducimos ligeramente el tamaño del logo para dar más espacio a los textos */
+  .logo-container img {
+    max-height: 1.3rem;          
+  }
+
+  /* Configuramos la lista para que use todo el espacio restante de forma fluida */
+  nav ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;             /* Si algún enlace no cabe, baja ordenadamente DENTRO de su zona */
+    justify-content: flex-end;   /* Alinea los textos hacia la derecha */
+    gap: 0.3rem 0.6rem;          /* Espaciado compacto y elegante para pantallas táctiles */
+    width: 100%;
+  }
+
+  /* Letras legibles, finas y profesionales en tu pantalla */
+  nav ul li a {
+    font-size: 0.75rem;          
+    color: #011d18;        
+    font-weight: 300;            /* Mantiene la estética limpia sobre el fondo cristal */
+    letter-spacing: 0.5px;       /* Un toque extra de separación elegante */
+  }
+
+  /* Efecto táctil sutil */
+  nav ul li a:hover {
+    font-size: 0.80rem;
+    color: #344a51; 
+  }
+}
 
 
 
