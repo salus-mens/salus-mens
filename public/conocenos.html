@@ -1,24 +1,139 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="Keywords" content="Centro Psicológico, Salus Mens, Psicología, Terapia, Salud Mental, Bienestar emocional, Psicoterapia, Cognitivo Conductual, Terapia de pareja, Terapia familiar, Psicología infantil, Psicología adolescente, Psicología clínica, Psicología positiva, Mindfulness, Estrés, Ansiedad, Depresión, Autoestima, Desarrollo personal, Coaching psicológico, autoconcepto, infancia, adolescencia, adultez, tercera edad, psicología educativa, psicología organizacional, psicología social, psicología de la salud, psicología forense, neuropsicología, psicología deportiva, psicología comunitaria, psicología laboral, psicología del desarrollo, psicología de la personalidad, psicología del aprendizaje, psicología del comportamiento, psicología cognitiva, psicología humanista, psicología transpersonal">
-    <title>Centro Psicológico Salus Mens</title>
+    <meta name="description"
+        content="Conoce la visión, misión, valores y al equipo del Centro Psicológico Salus Mens.">
+    <meta name="keywords"
+        content="Centro Psicológico, Salus Mens, Psicología, Terapia, Salud Mental, Bienestar emocional, Psicoterapia, Cognitivo Conductual, Psicología infantil, Psicorrehabilitación, Psicología clínica, Neuropsicología, ADOS-2">
+    <title>Conócenos | Centro Psicológico Salus Mens</title>
+    <link rel="icon" href="Images/Logo.png">
     <link rel="stylesheet" href="styles/css/styles.css">
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/nav.js" defer></script>
+    <script src="scripts/promo-flotante.js" defer></script>
+    <script src="scripts/recorrido-video.js" defer></script>
 </head>
-<body>
+
+<body class="pagina-interna">
     <nav>
         <div class="logo-container">
-           <a href="index.html"><img src="Images/Logo.png"></a>
+            <a href="index.html"><img src="Images/Logo.png" alt="Logo Salus Mens"></a>
         </div>
-        <ul>
+        <ul class="menu-enlaces">
             <li><a href="index.html">INICIO</a></li>
-            <li><a href="conocenos.html">CONÓCENOS</a></li>
+            <li><a href="conocenos.html" class="activo">CONÓCENOS</a></li>
             <li><a href="servicios.html">SERVICIOS</a></li>
             <li><a href="blog.html">BLOG</a></li>
             <li><a href="contacto.html">CONTACTOS</a></li>
-            <li><a href="login.html">LOGIN</a></li>
+            <li><a href="promociones.html">PROMOCIONES</a></li>
+            <li><a href="/admin/" title="Panel para publicar promociones (requiere usuario y contraseña)">ADMIN</a></li>
         </ul>
     </nav>
-    
+
+    <main class="mision-vision">
+        <h1 class="oculto">Conócenos</h1>
+
+        <!-- CUADRANTE 1: VISIÓN -->
+        <section class="bloque-contenido color-vision">
+            <div class="contenedor-imagen">
+                <h2 class="titulo-seccion">VISIÓN</h2>
+                <img src="Images/Vision.jpeg" alt="Visión">
+            </div>
+            <div class="cuadro-texto texto-justificado">
+                <p>Ser el Centro de Psicología y Psicorrehabilitación líder y de mayor impacto clínico, reconocidos por la excelencia en los procesos de psicoterapia con enfoque cognitivo-conductual, aplicando procesos medibles de habilitación y rehabilitación con bases neuropsicológicas. Nos proyectamos como un referente en innovación científica en el establecimiento de criterios diagnósticos de los trastornos mentales establecidos en los manuales diagnósticos CIE-11 y DSM-5-TR, que sean un complemento para su estudio y tratamiento.</p>
+            </div>
+        </section>
+
+        <!-- CUADRANTE 2: MISIÓN -->
+        <section class="bloque-contenido color-mision">
+            <div class="contenedor-imagen">
+                <h2 class="titulo-seccion">MISIÓN</h2>
+                <img src="Images/Mision.jpeg" alt="Misión">
+            </div>
+            <div class="cuadro-texto texto-centrado-izquierda">
+                <p>Brindar servicios de psicoterapia basada en evidencia científica, manteniendo el enfoque cognitivo-conductual, para establecer procesos de habilitación, estimulación y rehabilitación de las áreas cognitiva, conductual, comportamental, emocional, social y de lenguaje, mediante la evaluación, el diagnóstico y la investigación exhaustiva de cada signo y síntoma que se manifiesta en los trastornos mentales y del comportamiento establecidos en los manuales diagnósticos CIE-11 y DSM-5-TR, dirigidos a niños/as, adolescentes y adultos, priorizando su salud mental.</p>
+            </div>
+        </section>
+
+        <!-- CUADRANTE 3: VALORES (ÉTICA) -->
+        <section class="bloque-contenido color-valores">
+            <div class="contenedor-imagen">
+                <h2 class="titulo-seccion">VALORES</h2>
+                <img src="Images/Etica.jpeg" alt="Ética">
+            </div>
+            <div class="cuadro-texto texto-justificado">
+                <p>- Ética profesional<br>
+                    - Responsabilidad<br>
+                    - Compromiso<br>
+                    - Respeto<br>
+                    - Honestidad<br>
+                    - Empatía<br>
+                    - Confidencialidad</p>
+            </div>
+        </section>
+
+        <!-- CUADRANTE 4: CEO -->
+        <section class="bloque-contenido color-ceo">
+            <div class="contenedor-imagen">
+                <h2 class="titulo-seccion">CEO</h2>
+                <img src="Images/CEO.png" alt="Psic. Jorge David Andrango Herrera - CEO y Fundador de Salus Mens">
+            </div>
+            <div class="cuadro-texto texto-justificado">
+                <p>
+                    <strong>Psic. Jorge David Andrango Herrera</strong><br>
+                    Fundador y CEO de Salus Mens. Profesional en <strong>Psicología Infantil y Psicorrehabilitación</strong>, certificado en la evaluación diagnóstica <strong>ADOS-2</strong> y Principios de Neuropsicología; actualmente amplía su perfil en el área de Desarrollo de Software. Se especializa en la evaluación, diagnóstico y tratamiento de problemas conductuales, cognitivos, emocionales y del lenguaje en niños y adultos. Su práctica clínica se rige bajo el enfoque <strong>cognitivo-conductual</strong> y la evidencia científica, garantizando procesos de intervención medibles y de alta calidad.<br>
+                    <span class="registro-legal">Senescyt: 1005-2023-2674422</span>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- RECORRIDO EN VIDEO: se arrastra hacia los lados para girar por el consultorio real -->
+    <section class="recorrido">
+        <header class="encabezado-pagina">
+            <h2>RECORRIDO EN VIDEO</h2>
+            <p>Consultorio, Sala de espera y ubicación</p>
+        </header>
+
+        <!-- Escritorio: tres cuadros en fila (Consultorio, Sala de espera y mapa). Móvil: uno debajo del otro -->
+        <div class="recorrido-grid">
+            <!-- Cada visor muestra un tramo del mismo video: data-inicio y data-fin en segundos -->
+            <figure class="cuadro-recorrido">
+                <div class="visor-video" data-recorrido-video data-inicio="0" data-fin="24.5" tabindex="0"
+                    aria-label="Consultorio: arrastra o usa las flechas del teclado para girar">
+                    <video src="Images/consultorio/recorrido-video-hd.mp4" poster="Images/consultorio/recorrido-video-hd.jpg"
+                        muted playsinline preload="auto"></video>
+                    <p class="aviso-arrastre" data-aviso>&#8596; Arrastra para girar</p>
+                </div>
+                <figcaption>Consultorio</figcaption>
+            </figure>
+
+            <figure class="cuadro-recorrido">
+                <!-- "#t=31.5" hace que el video muestre de entrada el inicio de la sala de espera -->
+                <div class="visor-video" data-recorrido-video data-inicio="31.5" data-fin="45" tabindex="0"
+                    aria-label="Sala de espera: arrastra o usa las flechas del teclado para girar">
+                    <video src="Images/consultorio/recorrido-video-hd.mp4#t=31.5" muted playsinline
+                        preload="auto"></video>
+                    <p class="aviso-arrastre" data-aviso>&#8596; Arrastra para girar</p>
+                </div>
+                <figcaption>Sala de espera</figcaption>
+            </figure>
+
+            <figure class="cuadro-recorrido cuadro-mapa">
+                <div class="mapa">
+                    <iframe title="Ubicación del Centro Psicológico Salus Mens en Google Maps"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.8143715264737!2d-78.4175236148639!3d-0.08061105257477887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d599b5d6e8cead%3A0xc201b077c32f69ba!2sCentro%20Psicol%C3%B3gico%20%22Salus%20Mens%22!5e0!3m2!1ses!2sec!4v1791167212804!5m2!1ses!2sec"
+                        allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+                <figcaption>Ubicación · De los Albatros N7-149 y De los Huiragchuros</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <footer class="pie-pagina">© 2026 Centro Psicológico Salus Mens</footer>
+</body>
+
+</html>

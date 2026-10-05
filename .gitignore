@@ -1,0 +1,9 @@
+# Claves y configuración privada
+.env
+
+# Base de datos: contiene cuentas, contraseñas cifradas, celulares y pedidos. NUNCA subirla.
+usuarios.db
+*.db-journal
+
+# Librerías descargadas (se reinstalan con "npm install")
+node_modules/

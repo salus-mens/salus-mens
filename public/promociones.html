@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Promociones, fotos y videos del Centro Psicológico Salus Mens.">
+    <meta name="keywords"
+        content="Promociones, Descuentos, Psicología, Terapia, Salus Mens, Centro Psicológico">
+    <title>Promociones | Centro Psicológico Salus Mens</title>
+    <link rel="icon" href="Images/Logo.png">
+    <link rel="stylesheet" href="styles/css/styles.css">
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/nav.js" defer></script>
+    <script src="scripts/promociones.js" defer></script>
+    <script src="scripts/promo-flotante.js" defer></script>
+</head>
+
+<body class="pagina-interna">
+    <nav>
+        <div class="logo-container">
+            <a href="index.html"><img src="Images/Logo.png" alt="Logo Salus Mens"></a>
+        </div>
+        <ul class="menu-enlaces">
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="conocenos.html">CONÓCENOS</a></li>
+            <li><a href="servicios.html">SERVICIOS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contacto.html">CONTACTOS</a></li>
+            <li><a href="promociones.html" class="activo">PROMOCIONES</a></li>
+            <li><a href="/admin/" title="Panel para publicar promociones (requiere usuario y contraseña)">ADMIN</a></li>
+        </ul>
+    </nav>
+
+    <main class="contenido-pagina">
+        <header class="encabezado-pagina">
+            <h1>PROMOCIONES</h1>
+            <p>Novedades, promociones, fotos y videos de nuestro centro.</p>
+        </header>
+
+        <!-- Las publicaciones se cargan desde datos/promociones.json, que se edita desde /admin -->
+        <div class="galeria" data-galeria aria-live="polite"></div>
+
+        <section class="sin-publicaciones ventana tono-mint" data-sin-publicaciones hidden>
+            <h2>Muy pronto</h2>
+            <p>Estamos preparando nuevas promociones. Mientras tanto, escríbenos para agendar tu cita.</p>
+            <a href="contacto.html" class="boton">CONTÁCTANOS</a>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">© 2026 Centro Psicológico Salus Mens</footer>
+</body>
+
+</html>

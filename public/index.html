@@ -1,44 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="Keywords" content="Centro Psicológico, Salus Mens, Psicología, Terapia, Salud Mental, Bienestar emocional, Psicoterapia, Cognitivo Conductual, Terapia de pareja, Terapia familiar, Psicología infantil, Psicología adolescente, Psicología clínica, Psicología positiva, Mindfulness, Estrés, Ansiedad, Depresión, Autoestima, Desarrollo personal, Coaching psicológico, autoconcepto, infancia, adolescencia, adultez, tercera edad, psicología educativa, psicología organizacional, psicología social, psicología de la salud, psicología forense, neuropsicología, psicología deportiva, psicología comunitaria, psicología laboral, psicología del desarrollo, psicología de la personalidad, psicología del aprendizaje, psicología del comportamiento, psicología cognitiva, psicología humanista, psicología transpersonal">
+    <meta name="description"
+        content="Centro Psicológico Salus Mens: psicología clínica, psicología infantil y psicorrehabilitación, psicopedagogía y terapia ocupacional con enfoque cognitivo-conductual.">
+    <meta name="keywords"
+        content="Centro Psicológico, Salus Mens, Psicología, Terapia, Salud Mental, Bienestar emocional, Psicoterapia, Cognitivo Conductual, Terapia de pareja, Terapia familiar, Psicología infantil, Psicología adolescente, Psicología clínica, Psicología positiva, Mindfulness, Estrés, Ansiedad, Depresión, Autoestima, Desarrollo personal, Coaching psicológico, autoconcepto, infancia, adolescencia, adultez, tercera edad, psicología educativa, psicología organizacional, psicología social, psicología de la salud, psicología forense, neuropsicología, psicología deportiva, psicología comunitaria, psicología laboral, psicología del desarrollo, psicología de la personalidad, psicología del aprendizaje, psicología del comportamiento, psicología cognitiva, psicología humanista, psicología transpersonal">
     <title>Centro Psicológico Salus Mens</title>
+    <link rel="icon" href="Images/Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=DynaPuff:wght@600&display=swap">
     <link rel="stylesheet" href="styles/css/styles.css">
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/nav.js" defer></script>
+    <script src="scripts/promo-flotante.js" defer></script>
+    <script src="scripts/musica.js" defer></script>
 </head>
-<body>
+
+<body class="pagina-inicio">
     <nav>
         <div class="logo-container">
-           <a href="index.html"><img src="Images/Logo.png"></a>
+            <a href="index.html"><img src="Images/Logo.png" alt="Logo Salus Mens"></a>
         </div>
-        <ul>
-            <li><a href="index.html">INICIO</a></li>
+        <ul class="menu-enlaces">
+            <li><a href="index.html" class="activo">INICIO</a></li>
             <li><a href="conocenos.html">CONÓCENOS</a></li>
             <li><a href="servicios.html">SERVICIOS</a></li>
             <li><a href="blog.html">BLOG</a></li>
             <li><a href="contacto.html">CONTACTOS</a></li>
-            <li><a href="login.html">LOGIN</a></li>
+            <li><a href="promociones.html">PROMOCIONES</a></li>
+            <li><a href="/admin/" title="Panel para publicar promociones (requiere usuario y contraseña)">ADMIN</a></li>
         </ul>
     </nav>
 
     <header class="imagen-fondo">
-       <div class="contenedor-fondo">
-        <img src="Images/Fondo.jpeg" alt="imagen de fondo" class="img-base">
-        
+        <div class="contenedor-fondo">
+            <!-- El navegador elige la versión según la pantalla: 3200 px para celulares y pantallas de alta densidad.
+                 En vertical la foto cubre el alto, por eso su ancho real es ~178vh (proporción 16:9). -->
+            <img src="Images/Portada.jpg" srcset="Images/Portada.jpg 2048w, Images/Portada-4k.jpg 3200w"
+                sizes="(orientation: portrait) 178vh, 100vw" alt="" class="img-base" fetchpriority="high">
+
             <div class="img-encima">
-                <img src="Images/Titulo.png" alt="Imagen superior" class="img-encima">
-                           
-            </div> 
+                <!-- Título en texto real (no imagen): se ve nítido en cualquier pantalla y en modo nocturno -->
+                <h1 class="titulo-portada">
+                    <span class="titulo-centro">Centro Psicológico</span>
+                    <span class="titulo-marca">SALUS MENS</span>
+                    <span class="titulo-lema">
+                        <!-- Cada palabra se ilumina por separado al pasar el mouse (solo efecto visual, sin enlaces) -->
+                        <span class="lema-teal"><span class="lema-palabra">Evaluación</span>,</span>
+                        <span class="lema-oscuro"><span class="lema-palabra">diagnóstico</span>,</span>
+                        <span class="lema-verde"><span class="lema-palabra">terapia</span></span>
+                        <span class="lema-teal">e <span class="lema-palabra">investigación</span></span>
+                    </span>
+                </h1>
+
+                <!-- Música de fondo relajante: empieza al pulsar ▶ (los navegadores no permiten sonido automático) -->
+                <div class="musica" data-musica role="group" aria-label="Música de fondo">
+                    <button type="button" class="musica-boton musica-play" data-musica-play>&#9654;</button>
+                    <span class="oculto" data-musica-texto aria-live="polite">Música relajante</span>
+                    <button type="button" class="musica-boton" data-musica-menos aria-label="Bajar volumen">&minus;</button>
+                    <span class="musica-nivel" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+                    <button type="button" class="musica-boton" data-musica-mas aria-label="Subir volumen">+</button>
+                </div>
+            </div>
 
             <blockquote class="cita-frase">
                 "Si buscas resultados diferentes, no hagas siempre lo mismo."
-                <span>- A. EINSTEIN</span>   
-            </blockquote>        
-    </div> 
-        
+                <span>- A. EINSTEIN</span>
+            </blockquote>
+        </div>
     </header>
-
-
 </body>
+
 </html>

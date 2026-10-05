@@ -1,0 +1,110 @@
+# Panel de administración (Decap CMS) para publicar promociones, fotos y videos sin tocar código.
+# Se abre en: https://TU-SITIO/admin
+
+backend:
+  name: github
+  # Reemplaza con tu usuario y repositorio de GitHub cuando publiques el sitio
+  repo: USUARIO/salus-mens
+  branch: master
+
+# Para probar en tu computadora: ejecuta "npx decap-server" y abre http://127.0.0.1:5050/admin/
+local_backend: true
+
+locale: es
+
+# Dónde se guardan las fotos y videos que subes
+media_folder: public/Images/promociones
+public_folder: /Images/promociones
+
+collections:
+  - name: promociones
+    label: Promociones
+    editor:
+      preview: false
+    files:
+      - name: lista
+        label: Publicaciones de la página Promociones
+        file: public/datos/promociones.json
+        format: json
+        fields:
+          - label: Publicaciones
+            name: publicaciones
+            widget: list
+            label_singular: publicación
+            add_to_top: true
+            summary: "{{fields.tipo}} · {{fields.titulo}}"
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Tipo
+                name: tipo
+                widget: select
+                options: [Promoción, Foto, Video, Novedad]
+                default: Promoción
+              - label: Foto o video (horizontal o vertical)
+                name: archivo
+                widget: file
+                choose_url: false
+                hint: "Fotos JPG o PNG. Videos MP4 de menos de 50 MB (aprox. 1 minuto en 1080p)."
+              - label: Descripción
+                name: descripcion
+                widget: text
+                required: false
+              - label: Válida hasta (opcional; después se oculta sola)
+                name: hasta
+                widget: datetime
+                required: false
+                date_format: DD/MM/YYYY
+                time_format: false
+                format: YYYY-MM-DD
+                # Evita años mal escritos (por ejemplo 1906 en vez de 2026), que ocultarían la publicación
+                pattern: ['^20\d\d-', 'Revisa el año: debe ser 20XX (por ejemplo 2026).']
+                hint: "Si la fecha ya pasó, la publicación no se muestra."
+              - label: Publicada
+                name: publicada
+                widget: boolean
+                default: true
+                hint: "Desactívala para ocultarla sin borrarla."
+
+  # Publicaciones de redes sociales: se muestran en el cuadro flotante de la izquierda
+  - name: redes
+    label: Redes sociales
+    editor:
+      preview: false
+    files:
+      - name: lista
+        label: Publicaciones en TikTok, Instagram, Facebook y LinkedIn
+        file: public/datos/redes.json
+        format: json
+        fields:
+          - label: Publicaciones
+            name: publicaciones
+            widget: list
+            label_singular: publicación
+            add_to_top: true
+            summary: "{{fields.red}} · {{fields.titulo}}"
+            fields:
+              - label: Red social
+                name: red
+                widget: select
+                options: [TikTok, Instagram, Facebook, LinkedIn]
+              - label: Enlace de la publicación
+                name: enlace
+                widget: string
+                hint: "Para que la publicación se vea dentro del cuadro usa el enlace COMPLETO. Si la app te da uno corto (vt.tiktok.com, facebook.com/share, lnkd.in), ábrelo en el navegador y copia la dirección completa que aparece. Facebook: la publicación debe ser pública; en la computadora haz clic en la fecha de la publicación y copia esa dirección."
+                pattern: ['^https://', 'Pega el enlace completo (empieza con https://).']
+              - label: Título corto
+                name: titulo
+                widget: string
+                hint: "Una frase que invite a verla, por ejemplo: «3 señales de ansiedad en niños»."
+              - label: Portada (opcional)
+                name: archivo
+                widget: file
+                required: false
+                choose_url: false
+                hint: "Sube una captura o el video desde tu computadora o celular (no pegues aquí el enlace). Sin portada se muestra un cuadro con los colores de la red."
+              - label: Publicada
+                name: publicada
+                widget: boolean
+                default: true

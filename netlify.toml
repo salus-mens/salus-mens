@@ -1,0 +1,4 @@
+# Configuración para publicar en Netlify
+[build]
+  # Solo se publica la carpeta "public" (server.js, la base de datos y "privado" quedan fuera)
+  publish = "public"

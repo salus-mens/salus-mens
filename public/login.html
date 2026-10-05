@@ -4,54 +4,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingreso / Registro</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <title>Ingreso / Registro | Centro Psicológico Salus Mens</title>
+    <link rel="icon" href="Images/Logo.png">
+    <link rel="stylesheet" href="styles/css/styles.css">
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/nav.js" defer></script>
+    <script src="vendor/libphonenumber/libphonenumber-mobile.js" defer></script>
+    <script src="scripts/telefono.js" defer></script>
+    <script src="scripts/formularios.js" defer></script>
+    <script src="scripts/login.js" defer></script>
 </head>
 
-<body>
-    <div class="auth-container">
-        <div class="auth-box">
+<body class="pagina-interna">
+    <nav>
+        <div class="logo-container">
+            <a href="index.html"><img src="Images/Logo.png" alt="Logo Salus Mens"></a>
+        </div>
+        <ul class="menu-enlaces">
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="conocenos.html">CONÓCENOS</a></li>
+            <li><a href="servicios.html">SERVICIOS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contacto.html">CONTACTOS</a></li>
+            <li><a href="promociones.html">PROMOCIONES</a></li>
+            <li><a href="/admin/" title="Panel para publicar promociones (requiere usuario y contraseña)">ADMIN</a></li>
+        </ul>
+    </nav>
+
+    <main class="auth-container">
+
+        <!-- PANEL 1: INICIAR SESIÓN -->
+        <section class="ventana tono-mint" data-panel="login">
             <div class="auth-header">
-                <img src="images.Logo.png" alt="Logo Salus Mens" class="auth-logo">
+                <img src="Images/Logo.png" alt="Logo Salus Mens" class="auth-logo">
                 <h2>Iniciar Sesión</h2>
-                <p>Bienvenido a tu espacio seguro</p>
+                <p>Bienvenido/a a tu espacio seguro</p>
             </div>
-            <form action="api/login" method="POST">
+            <form action="/api/login" method="POST">
+                <!-- Página a la que se vuelve después de iniciar sesión (por ejemplo, el panel /admin) -->
+                <input type="hidden" name="volver">
                 <div class="input-group">
-                    <label for="login-email">Correo electrónico</label>
-                    <input type="email" id="login-email" name="email" placeholder="ejemplo@correo.com" required>
+                    <label for="login-identificador">Correo o usuario</label>
+                    <input type="text" id="login-identificador" name="identificador"
+                        placeholder="ejemplo@correo.com" autocomplete="username" autocapitalize="none"
+                        spellcheck="false" data-validar="usuario-o-email" required>
                 </div>
                 <div class="input-group">
                     <label for="login-password">Contraseña</label>
-                    <input type="password" id="login-password" name="password" placeholder="********" required>
+                    <input type="password" id="login-password" name="password" placeholder="********"
+                        autocomplete="current-password" required>
                 </div>
-                <button type="submit" class="btn-auth">Iniciar Sesión</button>
+                <p class="olvide">
+                    <button type="button" class="enlace-texto" data-mostrar="olvide">¿Olvidaste tu contraseña?</button>
+                </p>
+                <button type="submit" class="boton btn-auth">Iniciar Sesión</button>
             </form>
-        </div>
+            <p class="auth-cambio">
+                ¿No tienes cuenta?
+                <button type="button" class="enlace-texto" data-mostrar="registro">Regístrate</button>
+            </p>
+        </section>
 
-        <div class="auth-box auth-divider">
+        <!-- PANEL 2: CREAR CUENTA (se muestra al pulsar "Regístrate") -->
+        <section class="ventana tono-aqua" data-panel="registro" hidden>
             <div class="auth-header">
+                <img src="Images/Logo.png" alt="Logo Salus Mens" class="auth-logo">
                 <h2>Crear Cuenta</h2>
                 <p>Regístrate para recibir atención personalizada</p>
             </div>
-
             <form action="/api/registro" method="POST">
                 <div class="input-group">
-                    <label for="reg-nombre">Nombre Completo</label>
-                    <input type="text" id="reg-nombre" name="nombre" placeholder="Juan Pérez" required>
+                    <label for="reg-nombre">Nombre completo</label>
+                    <input type="text" id="reg-nombre" name="nombre" placeholder="Juan Pérez" autocomplete="name"
+                        maxlength="100" data-validar="nombre" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-email">Correo Electrónico</label>
-                    <input type="email" id="reg-email" name="email" placeholder="ejemplo@correo.com" required>
+                    <label for="reg-email">Correo electrónico</label>
+                    <input type="email" id="reg-email" name="email" placeholder="ejemplo@correo.com"
+                        autocomplete="email" data-validar="email" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-password">Contraseña Segura</label>
-                    <input type="password" id="reg-password" name="password" placeholder="Mínimo 8 caracteres" required>
+                    <label for="reg-celular">Celular</label>
+                    <div class="campo-telefono">
+                        <select id="reg-pais" name="pais" aria-label="País del celular" data-paises data-defecto="EC">
+                            <option value="EC">+593 Ecuador</option>
+                        </select>
+                        <input type="tel" id="reg-celular" name="celular" placeholder="099 123 4567"
+                            autocomplete="tel-national" inputmode="tel" maxlength="20" data-validar="celular"
+                            data-pais="reg-pais" required>
+                    </div>
                 </div>
-                <button type="submit" class="btn-auth btn-secondary">Registrarse</button>
+                <div class="input-group">
+                    <label for="reg-password">Contraseña segura</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Mínimo 8 caracteres"
+                        autocomplete="new-password" maxlength="72" data-validar="password-nueva"
+                        aria-describedby="ayuda-reg-password" required>
+                    <small class="ayuda-campo" id="ayuda-reg-password">Mínimo 8 caracteres, con letras y números.</small>
+                </div>
+                <div class="input-group">
+                    <label for="reg-confirmar">Confirmar contraseña</label>
+                    <input type="password" id="reg-confirmar" name="confirmar" placeholder="Repite tu contraseña"
+                        autocomplete="new-password" maxlength="72" data-validar="confirmar"
+                        data-igual-a="reg-password" required>
+                </div>
+
+                <fieldset class="grupo-seguridad">
+                    <legend>Preguntas de seguridad</legend>
+                    <p class="ayuda-campo">Te servirán para recuperar tu cuenta si olvidas la contraseña. No distinguen mayúsculas ni tildes.</p>
+                    <div class="input-group">
+                        <label for="reg-pregunta1">Pregunta 1</label>
+                        <select id="reg-pregunta1" name="pregunta1" data-validar="pregunta" required>
+                            <option value="">Elige una pregunta</option>
+                            <option value="1">¿Cuál es el nombre de tu primera mascota?</option>
+                            <option value="2">¿En qué ciudad naciste?</option>
+                            <option value="3">¿Cómo se llamaba tu escuela primaria?</option>
+                            <option value="4">¿Cuál es el segundo nombre de tu madre?</option>
+                            <option value="5">¿Cuál fue tu primer trabajo?</option>
+                            <option value="6">¿Cuál era tu comida favorita en la infancia?</option>
+                            <option value="7">¿Cómo se llamaba tu mejor amigo/a de la infancia?</option>
+                            <option value="8">¿En qué calle vivías de niño/a?</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-respuesta1">Respuesta 1</label>
+                        <input type="text" id="reg-respuesta1" name="respuesta1" maxlength="60" autocomplete="off"
+                            data-validar="respuesta" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-pregunta2">Pregunta 2</label>
+                        <select id="reg-pregunta2" name="pregunta2" data-validar="pregunta"
+                            data-distinta-de="reg-pregunta1" required>
+                            <option value="">Elige una pregunta</option>
+                            <option value="1">¿Cuál es el nombre de tu primera mascota?</option>
+                            <option value="2">¿En qué ciudad naciste?</option>
+                            <option value="3">¿Cómo se llamaba tu escuela primaria?</option>
+                            <option value="4">¿Cuál es el segundo nombre de tu madre?</option>
+                            <option value="5">¿Cuál fue tu primer trabajo?</option>
+                            <option value="6">¿Cuál era tu comida favorita en la infancia?</option>
+                            <option value="7">¿Cómo se llamaba tu mejor amigo/a de la infancia?</option>
+                            <option value="8">¿En qué calle vivías de niño/a?</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-respuesta2">Respuesta 2</label>
+                        <input type="text" id="reg-respuesta2" name="respuesta2" maxlength="60" autocomplete="off"
+                            data-validar="respuesta" required>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="boton btn-auth">Registrarse</button>
             </form>
-        </div>
-    </div>
+            <p class="auth-cambio">
+                ¿Ya tienes cuenta?
+                <button type="button" class="enlace-texto" data-mostrar="login">Inicia sesión</button>
+            </p>
+        </section>
+
+        <!-- PANEL 3: RECUPERAR CONTRASEÑA -->
+        <section class="ventana tono-seafoam" data-panel="olvide" hidden>
+            <div class="auth-header">
+                <img src="Images/Logo.png" alt="Logo Salus Mens" class="auth-logo">
+                <h2>Recuperar Contraseña</h2>
+                <p>Escribe tu correo y te enviaremos un enlace para crear una nueva contraseña.</p>
+            </div>
+            <form action="/api/olvide" method="POST">
+                <div class="input-group">
+                    <label for="olvide-email">Correo electrónico</label>
+                    <input type="email" id="olvide-email" name="email" placeholder="ejemplo@correo.com"
+                        autocomplete="email" data-validar="email" required>
+                </div>
+                <button type="submit" class="boton btn-auth">Enviar enlace</button>
+            </form>
+            <p class="auth-cambio">
+                ¿No tienes acceso a tu correo?
+                <button type="button" class="enlace-texto" data-mostrar="preguntas">Responde tus preguntas de seguridad</button>
+            </p>
+            <p class="auth-cambio">
+                <button type="button" class="enlace-texto" data-mostrar="login">Volver a iniciar sesión</button>
+            </p>
+        </section>
+
+        <!-- PANEL 4: RECUPERAR CON PREGUNTAS DE SEGURIDAD (2 pasos) -->
+        <section class="ventana tono-aqua" data-panel="preguntas" hidden>
+            <div class="auth-header">
+                <img src="Images/Logo.png" alt="Logo Salus Mens" class="auth-logo">
+                <h2>Preguntas de Seguridad</h2>
+                <p>Responde las preguntas que elegiste al registrarte para crear una nueva contraseña.</p>
+            </div>
+            <form action="/api/restablecer-preguntas" method="POST" data-recuperar-preguntas>
+                <div class="input-group">
+                    <label for="preg-identificador">Correo o usuario</label>
+                    <input type="text" id="preg-identificador" name="identificador" placeholder="ejemplo@correo.com"
+                        autocomplete="username" autocapitalize="none" spellcheck="false"
+                        data-validar="usuario-o-email" required>
+                </div>
+                <p class="mensaje-error" data-error-preguntas role="alert"></p>
+
+                <!-- Paso 1 -->
+                <button type="button" class="boton btn-auth" data-paso1>Continuar</button>
+
+                <!-- Paso 2: se muestra cuando llegan las preguntas -->
+                <div data-paso2 hidden>
+                    <div class="input-group">
+                        <label for="preg-respuesta1" data-texto-pregunta="0">Pregunta 1</label>
+                        <input type="text" id="preg-respuesta1" name="respuesta1" maxlength="60" autocomplete="off"
+                            data-validar="respuesta" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="preg-respuesta2" data-texto-pregunta="1">Pregunta 2</label>
+                        <input type="text" id="preg-respuesta2" name="respuesta2" maxlength="60" autocomplete="off"
+                            data-validar="respuesta" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="preg-password">Nueva contraseña</label>
+                        <input type="password" id="preg-password" name="password" placeholder="Mínimo 8 caracteres"
+                            autocomplete="new-password" maxlength="72" data-validar="password-nueva" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="preg-confirmar">Confirmar contraseña</label>
+                        <input type="password" id="preg-confirmar" name="confirmar" placeholder="Repite tu contraseña"
+                            autocomplete="new-password" maxlength="72" data-validar="confirmar"
+                            data-igual-a="preg-password" required>
+                    </div>
+                    <button type="submit" class="boton btn-auth">Guardar contraseña</button>
+                </div>
+            </form>
+            <p class="auth-cambio">
+                <button type="button" class="enlace-texto" data-mostrar="login">Volver a iniciar sesión</button>
+            </p>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">© 2026 Centro Psicológico Salus Mens</footer>
 </body>
 
 </html>

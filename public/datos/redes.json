@@ -1,0 +1,28 @@
+{
+  "publicaciones": [
+    {
+      "publicada": true,
+      "red": "TikTok",
+      "enlace": "https://www.tiktok.com/@salus_mens/photo/7652568328568982805",
+      "titulo": "Ansiedad"
+    },
+    {
+      "publicada": true,
+      "red": "Instagram",
+      "enlace": "https://www.instagram.com/reel/DX99Dqbjt8m/",
+      "titulo": "Nueva ubicación, nuevas instalaciones"
+    },
+    {
+      "publicada": true,
+      "red": "LinkedIn",
+      "enlace": "https://www.linkedin.com/feed/update/urn:li:activity:7468887298198310912",
+      "titulo": "Detrás de cada gran resultado, hay un sistema"
+    },
+    {
+      "publicada": true,
+      "red": "Facebook",
+      "enlace": "https://www.facebook.com/share/p/19db1YVqXj/",
+      "titulo": "Síguenos en Facebook"
+    }
+  ]
+}

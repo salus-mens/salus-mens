@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Nueva Contraseña | Centro Psicológico Salus Mens</title>
+    <link rel="icon" href="Images/Logo.png">
+    <link rel="stylesheet" href="styles/css/styles.css">
+    <script src="scripts/tema.js"></script>
+    <script src="scripts/nav.js" defer></script>
+    <script src="scripts/formularios.js" defer></script>
+    <script src="scripts/login.js" defer></script>
+</head>
+
+<body class="pagina-interna">
+    <nav>
+        <div class="logo-container">
+            <a href="index.html"><img src="Images/Logo.png" alt="Logo Salus Mens"></a>
+        </div>
+        <ul class="menu-enlaces">
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="conocenos.html">CONÓCENOS</a></li>
+            <li><a href="servicios.html">SERVICIOS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contacto.html">CONTACTOS</a></li>
+            <li><a href="promociones.html">PROMOCIONES</a></li>
+            <li><a href="/admin/" title="Panel para publicar promociones (requiere usuario y contraseña)">ADMIN</a></li>
+        </ul>
+    </nav>
+
+    <main class="auth-container">
+        <section class="ventana tono-mint">
+            <div class="auth-header">
+                <img src="Images/Logo.png" alt="Logo Salus Mens" class="auth-logo">
+                <h2>Nueva Contraseña</h2>
+            </div>
+
+            <!-- Se muestra si el enlace del correo es válido -->
+            <form action="/api/restablecer" method="POST" data-con-token>
+                <input type="hidden" name="token">
+                <div class="input-group">
+                    <label for="nueva-password">Nueva contraseña</label>
+                    <input type="password" id="nueva-password" name="password" placeholder="Mínimo 8 caracteres"
+                        autocomplete="new-password" maxlength="72" data-validar="password-nueva"
+                        aria-describedby="ayuda-nueva-password" required>
+                    <small class="ayuda-campo" id="ayuda-nueva-password">Mínimo 8 caracteres, con letras y números.</small>
+                </div>
+                <div class="input-group">
+                    <label for="nueva-confirmar">Confirmar contraseña</label>
+                    <input type="password" id="nueva-confirmar" name="confirmar" placeholder="Repite tu contraseña"
+                        autocomplete="new-password" maxlength="72" data-validar="confirmar"
+                        data-igual-a="nueva-password" required>
+                </div>
+                <button type="submit" class="boton btn-auth">Guardar contraseña</button>
+            </form>
+
+            <!-- Se muestra si se abrió la página sin un enlace válido -->
+            <div class="auth-header" data-sin-token hidden>
+                <p>Este enlace no es válido. Solicita uno nuevo desde "¿Olvidaste tu contraseña?".</p>
+                <p class="auth-cambio"><a href="login.html#olvide" class="boton">SOLICITAR ENLACE</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">© 2026 Centro Psicológico Salus Mens</footer>
+</body>
+
+</html>

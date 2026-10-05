@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Promociones | Mi espacio · Salus Mens</title>
+    <link rel="icon" href="/Images/Logo.png">
+    <link rel="stylesheet" href="/styles/css/styles.css">
+    <script src="/scripts/tema.js"></script>
+    <script src="/scripts/nav.js" defer></script>
+    <script src="/scripts/formularios.js" defer></script>
+    <script src="/scripts/miembros.js" defer></script>
+</head>
+
+<body class="pagina-interna">
+    <nav>
+        <div class="logo-container">
+            <a href="/index.html"><img src="/Images/Logo.png" alt="Logo Salus Mens"></a>
+        </div>
+        <ul class="menu-enlaces">
+            <li><a href="/index.html">INICIO</a></li>
+            <li><a href="/conocenos.html">CONÓCENOS</a></li>
+            <li><a href="/servicios.html">SERVICIOS</a></li>
+            <li><a href="/blog.html">BLOG</a></li>
+            <li><a href="/contacto.html">CONTACTOS</a></li>
+            <li><a href="/miembros/" class="activo">MI ESPACIO</a></li>
+            <li><a href="/api/salir">SALIR</a></li>
+        </ul>
+    </nav>
+
+    <main class="contenido-pagina">
+        <header class="encabezado-pagina">
+            <span class="insignia-exclusiva"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> ZONA EXCLUSIVA</span>
+            <h1>PROMOCIONES</h1>
+            <p>Beneficios exclusivos para usuarios registrados.</p>
+        </header>
+        <nav class="subnav" aria-label="Secciones de Mi espacio">
+            <a href="/miembros/">Mi espacio</a>
+            <a href="/miembros/talleres.html">Talleres</a>
+            <a href="/miembros/librerias.html">Librerías</a>
+            <a href="/miembros/software.html">Software</a>
+            <a href="/miembros/promociones.html" aria-current="page">Promociones</a>
+        </nav>
+
+        <!-- Estructura y función de la sección -->
+        <section class="estructura ventana tono-mint">
+            <p><strong>Estructura:</strong> Servicio, beneficio, vigencia y condiciones.</p>
+            <p><strong>Función:</strong> Acceder a la atención con precios y paquetes preferenciales.</p>
+        </section>
+
+        <section class="grupo-plantilla">
+            <h2>Promociones vigentes</h2>
+            <div class="plantillas">
+                <article class="tarjeta-plantilla ventana tono-pastel">
+                    <span class="etiqueta-plantilla">Evaluación</span>
+                    <h3>Primera evaluación con descuento</h3>
+                    <p>Vigencia: por definir · Cupos limitados</p>
+                    <span class="estado-plantilla">Próximamente</span>
+                </article>
+                <article class="tarjeta-plantilla ventana tono-pastel">
+                    <span class="etiqueta-plantilla">Paquete</span>
+                    <h3>Paquete de 4 sesiones</h3>
+                    <p>Vigencia: por definir · Pago anticipado</p>
+                    <span class="estado-plantilla">Próximamente</span>
+                </article>
+                <article class="tarjeta-plantilla ventana tono-pastel">
+                    <span class="etiqueta-plantilla">Convenio</span>
+                    <h3>Convenios con instituciones educativas</h3>
+                    <p>Vigencia: anual · Previa firma</p>
+                    <span class="estado-plantilla">Próximamente</span>
+                </article>
+            </div>
+        </section>
+
+        <!-- Solicitud: igual en todas las secciones -->
+        <section class="pedido ventana tono-aqua">
+            <h2>Solicitar</h2>
+            <p class="ayuda-campo">¿No encuentras lo que necesitas? Cuéntanos qué te gustaría y lo preparamos.</p>
+            <form action="/api/pedidos" method="POST">
+                <input type="hidden" name="seccion" value="promociones">
+                <div class="fila-campos">
+                    <div class="input-group">
+                        <label for="pedido-tipo">Tipo</label>
+                        <select id="pedido-tipo" name="tipo" required>
+                                <option value="">Elige un tipo</option>
+                                <option value="Promoción de un servicio">Promoción de un servicio</option>
+                                <option value="Paquete de sesiones">Paquete de sesiones</option>
+                                <option value="Convenio institucional">Convenio institucional</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="pedido-nombre">Nombre del pedido</label>
+                        <input type="text" id="pedido-nombre" name="nombre" maxlength="100"
+                            placeholder="Ej.: Primera evaluación con descuento" data-validar="nombre-pedido" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="pedido-caracteristicas">Características</label>
+                    <textarea id="pedido-caracteristicas" name="caracteristicas" maxlength="2000"
+                        placeholder="Público, objetivo, fechas, formato, cantidad..." data-validar="mensaje"
+                        required></textarea>
+                </div>
+                <button type="submit" class="boton">ENVIAR PEDIDO</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="pie-pagina">© 2026 Centro Psicológico Salus Mens · Zona exclusiva para usuarios registrados</footer>
+</body>
+
+</html>
