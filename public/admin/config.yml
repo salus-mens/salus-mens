@@ -3,8 +3,8 @@
 
 backend:
   name: github
-  # Reemplaza con tu usuario y repositorio de GitHub cuando publiques el sitio
-  repo: USUARIO/salus-mens
+  # Repositorio de GitHub donde se guardan las publicaciones
+  repo: salus-mens/salus-mens
   branch: master
 
 # Para probar en tu computadora: ejecuta "npx decap-server" y abre http://127.0.0.1:5050/admin/
