@@ -1,4 +1,8 @@
 # Configuración para publicar en Netlify
 [build]
-  # Solo se publica la carpeta "public" (server.js, la base de datos y "privado" quedan fuera)
-  publish = "public"
+  # Se publica solo la carpeta "public" (server.js, la base de datos, "privado" y "chatbot" quedan fuera).
+  # Al usar "public" como carpeta base, Netlify no instala las librerías del servidor (bcrypt, SQLite, sharp…),
+  # que no hacen falta para la página publicada y hacían fallar la publicación.
+  base = "public"
+  publish = "."
+  command = ""

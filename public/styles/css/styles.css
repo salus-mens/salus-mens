@@ -821,6 +821,11 @@ nav ul li a.activo {
     color: var(--texto-fuerte);
 }
 
+.pie-pagina a {
+    color: inherit;
+    font-weight: 700;
+}
+
 
 /* CONÓCENOS============================================================================ */
 

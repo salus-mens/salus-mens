@@ -9,7 +9,7 @@ const asistente = require('./asistente');
 const notificar = require('./notificar');
 const respuestas = require('./respuestas');
 
-const GRAPH = `https://graph.facebook.com/${process.env.META_GRAPH_VERSION || 'v23.0'}`;
+const GRAPH = `https://graph.facebook.com/${process.env.META_GRAPH_VERSION || 'v26.0'}`;
 const PAUSA_MS = 12 * 60 * 60 * 1000; // si el psicólogo responde a mano, el asistente se calla 12 h con esa persona
 
 let db = null;
@@ -139,7 +139,7 @@ async function enviar(canal, usuario, contenido) {
     }
     const instagramDirecto = canal === 'instagram' && process.env.INSTAGRAM_TOKEN;
     const url = instagramDirecto
-        ? `https://graph.instagram.com/${process.env.META_GRAPH_VERSION || 'v23.0'}/me/messages`
+        ? `https://graph.instagram.com/${process.env.META_GRAPH_VERSION || 'v26.0'}/me/messages`
         : `${GRAPH}/me/messages`;
     for (const parte of trozos(texto, 1000)) {
         await llamarGraph(url, { recipient: { id: usuario }, messaging_type: 'RESPONSE', message: { text: parte } },
@@ -176,7 +176,7 @@ async function enviarImagen(canal, usuario, png, { pie = '', enlacePublico = '' 
         if (!r.ok) throw new Error(`Meta respondió ${r.status} al enviar la imagen: ${await r.text()}`);
     } else if (canal === 'instagram' && enlacePublico) {
         const instagramDirecto = Boolean(process.env.INSTAGRAM_TOKEN);
-        await llamarGraph(instagramDirecto ? `https://graph.instagram.com/${process.env.META_GRAPH_VERSION || 'v23.0'}/me/messages` : `${GRAPH}/me/messages`,
+        await llamarGraph(instagramDirecto ? `https://graph.instagram.com/${process.env.META_GRAPH_VERSION || 'v26.0'}/me/messages` : `${GRAPH}/me/messages`,
             { recipient: { id: usuario }, message: { attachment: { type: 'image', payload: { url: enlacePublico } } } },
             instagramDirecto ? process.env.INSTAGRAM_TOKEN : process.env.META_PAGE_TOKEN);
     }
