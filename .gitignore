@@ -10,3 +10,5 @@ node_modules/
 
 # Material de difusión (presentación, video e imágenes para redes): pesado, se guarda solo en la computadora
 difusion/
+chatbot-prueba.db
+google-cuenta-servicio.json

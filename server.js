@@ -42,7 +42,8 @@ const PREGUNTAS = {
 
 // Configuración para leer formularios y JSON
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Se guarda el cuerpo original para comprobar la firma de los avisos de Meta (asistente virtual)
+app.use(express.json({ verify: (req, res, buffer) => { req.rawBody = buffer; } }));
 
 // Servir los archivos estáticos de tu HTML/CSS
 // El panel de publicaciones (/admin) solo se abre con una cuenta de administrador.
@@ -613,6 +614,9 @@ app.post('/api/pedidos', requiereSesion, (req, res) => {
         paginaRespuesta(res, 500, 'Error en el servidor', 'No pudimos registrar tu pedido. Inténtalo más tarde.', volver);
     }
 });
+
+// --- ASISTENTE VIRTUAL (WhatsApp, Messenger e Instagram con IA) ---
+require('./chatbot').montar(app, db);
 
 // Iniciar el servidor
 const servidor = app.listen(PORT, HOST, () => {

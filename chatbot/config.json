@@ -1,0 +1,51 @@
+{
+  "_ayuda": "Datos que usa el asistente de WhatsApp. Puedes cambiarlos aquí sin tocar el código; después reinicia el servidor.",
+
+  "centro": "Centro Psicológico Salus Mens",
+  "profesional": "Psic. Jorge David Andrango Herrera",
+  "direccion": "De los Albatros N7-149 y De los Huiragchuros, Quito",
+  "telefono": "0987746826",
+  "correo": "salus_mens@outlook.com",
+  "web": "https://salus-mens.netlify.app",
+  "modalidades": ["presencial", "en línea"],
+
+  "_horario": "Horas en que se puede agendar (hora de Ecuador). Días: 1 = lunes … 6 = sábado, 0 = domingo.",
+  "horario": {
+    "duracion_minutos": 60,
+    "anticipacion_minima_horas": 3,
+    "dias_maximos_adelante": 30,
+    "dias": {
+      "1": { "manana": ["08:00", "12:00"], "tarde": ["14:00", "18:00"] },
+      "2": { "manana": ["08:00", "12:00"], "tarde": ["14:00", "18:00"] },
+      "3": { "manana": ["08:00", "12:00"], "tarde": ["14:00", "18:00"] },
+      "4": { "manana": ["08:00", "12:00"], "tarde": ["14:00", "18:00"] },
+      "5": { "manana": ["08:00", "12:00"], "tarde": ["14:00", "18:00"] },
+      "6": { "manana": ["08:00", "12:00"] }
+    }
+  },
+
+  "valores": {
+    "infantil_adolescente": { "nombre": "Consulta infantil y adolescente", "valor": 15 },
+    "adulto": { "nombre": "Consulta adulto", "valor": 18 },
+    "discapacidad": { "nombre": "Consulta discapacidad", "valor": 18 }
+  },
+  "abono_porcentaje": 50,
+
+  "pago": {
+    "banco": "",
+    "tipo_cuenta": "",
+    "numero_cuenta": "2203534498",
+    "cedula": "1724477870",
+    "titular": "Andrango Herrera Jorge David",
+    "celular": "0987746826",
+    "correo": "salus_mens@outlook.com"
+  },
+
+  "areas_motivo": [
+    "Área cognitiva (académica)",
+    "Área socio-emocional",
+    "Área comportamental",
+    "Área de lenguaje",
+    "Discapacidad y/o trastornos del neurodesarrollo"
+  ]
+}

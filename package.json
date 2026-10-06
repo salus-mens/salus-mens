@@ -6,16 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file-if-exists=.env server.js",
-    "admin": "node herramientas/admin.js"
+    "admin": "node herramientas/admin.js",
+    "chatbot": "node --env-file-if-exists=.env herramientas/chatbot-prueba.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^13.0.3",
     "express": "^5.2.1",
+    "google-auth-library": "^11.1.0",
     "libphonenumber-js": "^1.13.14",
     "nodemailer": "^10.0.14"
   }
