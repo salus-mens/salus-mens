@@ -108,3 +108,64 @@ collections:
                 name: publicada
                 widget: boolean
                 default: true
+
+  # Artículos del Blog: se muestran en blog.html (del más reciente al más antiguo)
+  - name: blog
+    label: Blog
+    editor:
+      preview: false
+    files:
+      - name: articulos
+        label: Artículos del Blog
+        file: public/datos/blog.json
+        format: json
+        fields:
+          - label: Artículos
+            name: articulos
+            widget: list
+            label_singular: artículo
+            add_to_top: true
+            summary: "{{fields.fecha}} · {{fields.titulo}}"
+            fields:
+              - label: Título
+                name: titulo
+                widget: string
+              - label: Categoría
+                name: categoria
+                widget: select
+                options: [Psicología Clínica, Psicología Infantil, Psicorrehabilitación, Psicopedagogía, Terapia Ocupacional, Crianza, Bienestar, Noticias del centro]
+              - label: Fecha
+                name: fecha
+                widget: datetime
+                date_format: DD/MM/YYYY
+                time_format: false
+                format: YYYY-MM-DD
+                pattern: ['^20\d\d-', 'Revisa el año: debe ser 20XX (por ejemplo 2026).']
+                hint: "Los artículos se ordenan por fecha: el más reciente aparece primero."
+              - label: Autor
+                name: autor
+                widget: string
+                default: Centro Psicológico Salus Mens
+              - label: Imagen (opcional)
+                name: imagen
+                widget: image
+                required: false
+                choose_url: false
+                media_folder: /public/Images/blog
+                public_folder: /Images/blog
+                hint: "Una foto horizontal se ve mejor. Se muestra arriba del artículo."
+              - label: Resumen (lo que se ve sin abrir el artículo)
+                name: resumen
+                widget: text
+                hint: "Dos o tres líneas que inviten a leer."
+              - label: Contenido completo (aparece al pulsar «Leer más»)
+                name: contenido
+                widget: markdown
+                buttons: [bold, italic, link, heading-three, bulleted-list, numbered-list]
+                editor_components: []
+                modes: [rich_text]
+              - label: Publicado
+                name: publicada
+                widget: boolean
+                default: true
+                hint: "Desactívalo para ocultar el artículo sin borrarlo (por ejemplo, un borrador)."

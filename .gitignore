@@ -7,3 +7,6 @@ usuarios.db
 
 # Librerías descargadas (se reinstalan con "npm install")
 node_modules/
+
+# Material de difusión (presentación, video e imágenes para redes): pesado, se guarda solo en la computadora
+difusion/

@@ -1,0 +1,31 @@
+{
+  "articulos": [
+    {
+      "titulo": "Ansiedad: cuándo es normal y cuándo pedir ayuda",
+      "categoria": "Psicología Clínica",
+      "fecha": "2026-10-03",
+      "autor": "Centro Psicológico Salus Mens",
+      "resumen": "La ansiedad es una respuesta natural ante situaciones de amenaza o exigencia. El problema aparece cuando es intensa, frecuente y empieza a limitar la vida diaria.",
+      "contenido": "Algunas **señales de alerta** son:\n\n- Preocupación constante difícil de controlar\n- Problemas de sueño y tensión muscular\n- Irritabilidad\n- Evitación de lugares o personas\n- Síntomas físicos como palpitaciones o falta de aire\n\nSi estas señales se mantienen por varias semanas, es recomendable consultar con un profesional. La terapia cognitivo-conductual es uno de los tratamientos con mayor evidencia científica para los trastornos de ansiedad.",
+      "publicada": true
+    },
+    {
+      "titulo": "Señales tempranas del autismo que conviene observar",
+      "categoria": "Psicología Infantil",
+      "fecha": "2026-10-02",
+      "autor": "Centro Psicológico Salus Mens",
+      "resumen": "Detectar a tiempo las señales del Trastorno del Espectro Autista permite iniciar una intervención temprana, que es clave para el desarrollo del niño/a.",
+      "contenido": "Algunas señales que pueden aparecer en los primeros años son:\n\n- Poco contacto visual\n- No responder a su nombre\n- No señalar objetos para compartir interés\n- Retraso en el lenguaje\n- Movimientos repetitivos e intereses muy restringidos\n\nNinguna señal aislada confirma un diagnóstico; por eso es importante una **evaluación especializada** con instrumentos estandarizados como el ADOS-2.",
+      "publicada": true
+    },
+    {
+      "titulo": "Cómo acompañar las tareas escolares en casa",
+      "categoria": "Psicopedagogía",
+      "fecha": "2026-10-01",
+      "autor": "Centro Psicológico Salus Mens",
+      "resumen": "Un buen acompañamiento no significa hacer las tareas por ellos, sino crear las condiciones para que aprendan con autonomía.",
+      "contenido": "1. Establezca un horario y un lugar fijo de estudio, libre de pantallas y ruidos.\n2. Divida las tareas largas en pasos cortos con pausas breves.\n3. Refuerce el esfuerzo, no solo el resultado.\n\nSi observa que su hijo/a se esfuerza mucho y aun así no logra avanzar en lectura, escritura o cálculo, podría tratarse de una **dificultad específica del aprendizaje** que conviene evaluar.",
+      "publicada": true
+    }
+  ]
+}

@@ -1184,6 +1184,8 @@ nav ul li a.activo {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    align-items: start;
+    /* Cada artículo mide lo que necesita (al abrir uno, los demás no se estiran) */
 }
 
 .articulo {
@@ -1215,6 +1217,79 @@ nav ul li a.activo {
     line-height: 1.5;
     text-align: justify;
     color: var(--texto);
+}
+
+/* Artículos cargados desde el panel ADMIN */
+.articulo {
+    scroll-margin-top: 90px;
+    /* Al abrir un enlace directo, el artículo no queda debajo del menú */
+}
+
+.articulo-imagen {
+    display: block;
+    width: calc(100% + 32px);
+    margin: -16px -16px 4px;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.articulo-meta {
+    font-size: 0.75rem !important;
+    font-weight: 700;
+    opacity: 0.75;
+}
+
+.articulo-contenido h3 {
+    margin: 12px 0 4px;
+    font-size: 0.95rem;
+    color: var(--titulo);
+}
+
+.articulo-contenido ul,
+.articulo-contenido ol {
+    margin: 8px 0;
+    padding-left: 22px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.articulo-contenido a {
+    color: var(--titulo);
+    font-weight: 700;
+}
+
+.articulo-compartir {
+    margin-top: 10px;
+    font-size: 0.8rem;
+}
+
+.filtros-blog {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.filtro-blog {
+    padding: 6px 14px;
+    border: 1px solid var(--campo-borde);
+    border-radius: 20px;
+    background: var(--tono-mint);
+    color: var(--texto-fuerte);
+    font-family: var(--fuente);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.filtro-blog:hover,
+.filtro-blog[aria-pressed="true"] {
+    background: var(--boton);
+    border-color: var(--boton);
+    color: var(--boton-texto);
 }
 
 /* Texto completo desplegable */
