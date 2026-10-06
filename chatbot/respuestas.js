@@ -110,21 +110,6 @@ const textoAreas = () => CONFIG.areas_motivo.map((a, i) => `${i + 1}. ${a}`).joi
 
 const CIERRE = 'Es un placer atenderle, *gracias por su confianza*, su *Salud Mental* es nuestra prioridad, que tenga una excelente semana. 🌻';
 
-function textoConfirmacion(r) {
-    return `${saludo()}, saluda Centro Psicológico *Salus Mens*.
-Que tenga una *excelente semana*, el motivo del presente es para *notificarle* que su *consulta* se *agendó* para:
-
-*Fecha:* ${r.fecha}
-*Hora:* ${r.hora}
-*Modalidad:* ${r.modalidad[0].toUpperCase() + r.modalidad.slice(1)}
-*Paciente:* ${r.paciente}
-*Motivo:* ${r.motivo}
-*Abono:* ${pesos(r.abono)} dólares americanos
-*Por cancelar:* ${pesos(r.por_cancelar)} dólares americanos
-
-_Gracias por su confianza_, cualquier inquietud nos informa, su *salud mental* Ψ es nuestra *prioridad*, un excelente día.`;
-}
-
 // --- Lógica ---
 const normalizar = (t) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 const esNumero = (t, n) => new RegExp(`^\\s*${n}\\s*[.)-]?\\s*$`).test(t);
@@ -200,7 +185,15 @@ async function pasoAgendar(conversacion, paso, datos, texto, contexto) {
             }
             notificar.nuevaCita(r.cita, contexto);
             guardar(conversacion, null, {});
-            return [textoConfirmacion(r), `Para *asegurar su asistencia*, por favor realice el abono de *${pesos(r.abono)}* y envíe el comprobante por este chat.\n\n${textoPago()}`];
+            return [`Su horario quedó *reservado* ✅
+
+*Fecha:* ${r.fecha[0].toUpperCase() + r.fecha.slice(1)}
+*Hora:* ${r.hora}
+*Paciente:* ${r.paciente}
+*Valor de la consulta:* ${pesos(r.valor)}
+*Abono (${CONFIG.abono_porcentaje} %):* ${pesos(r.abono)}
+
+Para *asegurar su asistencia*, realice el abono y envíe el *comprobante* por este chat dentro de las próximas *${CONFIG.horas_para_abono || 24} horas*. Una vez *verificado con el banco*, le enviaremos la *confirmación de su cita*.`, textoPago()];
         }
         default:
             return null;
@@ -226,7 +219,7 @@ async function responder({ canal, usuario, nombreContacto, texto }) {
         const r = await agenda.registrarComprobante(conversacion, 0);
         if (r.cita) {
             notificar.comprobante(r.cita, contexto);
-            return `Recibimos su *comprobante*, muchas gracias. El centro lo verificará y le confirmará. ${CIERRE}`;
+            return `Recibimos su *comprobante*, muchas gracias. 🙏 Lo *verificaremos con el banco* y en cuanto esté confirmado le enviaremos la *confirmación de su cita* con todos los datos. ${CIERRE}`;
         }
     }
     if (/^\[el paciente envio un audio/.test(t)) return 'Por el momento no podemos escuchar audios. Por favor, *escriba* su mensaje. 🙏';

@@ -38,10 +38,11 @@ const resumenCita = (c) => `${c.nombre} (${c.edad} años) · ${c.inicio.replace(
     + `Valor: $${c.valor.toFixed(2)} · Abono: $${c.abono.toFixed(2)}`;
 
 module.exports = {
-    nuevaCita: (c, ctx) => enviar(`Nueva cita: ${c.nombre}`, `${resumenCita(c)}\n\n${contacto(ctx)}\n\nEstado: abono pendiente.`),
+    nuevaCita: (c, ctx) => enviar(`Nueva reserva: ${c.nombre}`, `${resumenCita(c)}\n\n${contacto(ctx)}\n\nEstado: reservada, esperando el abono.`),
     citaCancelada: (c, ctx) => enviar(`Cita cancelada: ${c.nombre}`, `${resumenCita(c)}\n\n${contacto(ctx)}`),
     comprobante: (c, ctx) => enviar(`Comprobante por verificar: ${c.nombre}`,
-        `El paciente envió el comprobante del abono. Revísalo en el chat.\n\n${resumenCita(c)}\n\n${contacto(ctx)}`),
+        `El paciente envió el comprobante del abono. Revísalo en el chat, verifícalo con el banco y confirma la cita en el panel:\n`
+        + `${process.env.BASE_URL || 'http://127.0.0.1:5050'}/admin-citas\n\n${resumenCita(c)}\n\n${contacto(ctx)}`),
     derivacion: (d, ctx) => enviar(`${d.urgente ? 'URGENTE · ' : ''}Comunicarse con un paciente`,
         `${d.motivo}\n\n${contacto(ctx)}`)
 };

@@ -30,6 +30,8 @@
     "discapacidad": { "nombre": "Consulta discapacidad", "valor": 18 }
   },
   "abono_porcentaje": 50,
+  "_horas_para_abono": "Horas que se guarda una reserva sin comprobante; después el horario se libera.",
+  "horas_para_abono": 24,
 
   "pago": {
     "banco": "",

@@ -147,6 +147,42 @@ async function enviar(canal, usuario, contenido) {
     }
 }
 
+// Envía una imagen PNG (por ejemplo, la confirmación de la cita) con un texto al pie.
+// WhatsApp y Messenger: se sube el archivo. Instagram: se envía por enlace (requiere BASE_URL pública).
+async function enviarImagen(canal, usuario, png, { pie = '', enlacePublico = '' } = {}) {
+    const archivo = new Blob([png], { type: 'image/png' });
+    if (canal === 'whatsapp') {
+        const formulario = new FormData();
+        formulario.append('messaging_product', 'whatsapp');
+        formulario.append('type', 'image/png');
+        formulario.append('file', archivo, 'cita-salus-mens.png');
+        const subida = await fetch(`${GRAPH}/${process.env.WHATSAPP_PHONE_NUMBER_ID}/media`, {
+            method: 'POST', headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}` }, body: formulario
+        });
+        if (!subida.ok) throw new Error(`Meta respondió ${subida.status} al subir la imagen: ${await subida.text()}`);
+        const { id } = await subida.json();
+        await llamarGraph(`${GRAPH}/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+            { messaging_product: 'whatsapp', to: usuario, type: 'image', image: { id, caption: pie.slice(0, 1000) } },
+            process.env.WHATSAPP_TOKEN);
+        return;
+    }
+    if (canal === 'messenger') {
+        const formulario = new FormData();
+        formulario.append('recipient', JSON.stringify({ id: usuario }));
+        formulario.append('messaging_type', 'RESPONSE');
+        formulario.append('message', JSON.stringify({ attachment: { type: 'image', payload: { is_reusable: false } } }));
+        formulario.append('filedata', archivo, 'cita-salus-mens.png');
+        const r = await fetch(`${GRAPH}/me/messages`, { method: 'POST', headers: { Authorization: `Bearer ${process.env.META_PAGE_TOKEN}` }, body: formulario });
+        if (!r.ok) throw new Error(`Meta respondió ${r.status} al enviar la imagen: ${await r.text()}`);
+    } else if (canal === 'instagram' && enlacePublico) {
+        const instagramDirecto = Boolean(process.env.INSTAGRAM_TOKEN);
+        await llamarGraph(instagramDirecto ? `https://graph.instagram.com/${process.env.META_GRAPH_VERSION || 'v23.0'}/me/messages` : `${GRAPH}/me/messages`,
+            { recipient: { id: usuario }, message: { attachment: { type: 'image', payload: { url: enlacePublico } } } },
+            instagramDirecto ? process.env.INSTAGRAM_TOKEN : process.env.META_PAGE_TOKEN);
+    }
+    if (pie) await enviar(canal, usuario, pie);
+}
+
 function marcarLeido(id) {
     llamarGraph(`${GRAPH}/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
         { messaging_product: 'whatsapp', status: 'read', message_id: id }, process.env.WHATSAPP_TOKEN)
@@ -204,4 +240,4 @@ function crearRutas() {
     return rutas;
 }
 
-module.exports = { iniciar, crearRutas, leerAviso, trozos, firmaValida, responderMensaje };
+module.exports = { iniciar, crearRutas, leerAviso, trozos, firmaValida, responderMensaje, enviar, enviarImagen };

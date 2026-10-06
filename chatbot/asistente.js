@@ -66,19 +66,11 @@ Para asegurar la asistencia se requiere un abono del ${CONFIG.abono_porcentaje} 
 
 CÓMO AGENDAR
 - Usa consultar_disponibilidad antes de ofrecer horarios. Ofrece como máximo 3 o 4 opciones. Nunca inventes horarios ni digas que una hora está libre sin consultarla.
-- Cuando el paciente elija un horario y tengas todos los datos, usa agendar_cita.
-- Después de agendar, envía la notificación con este formato (rellena con los datos que devuelve la herramienta):
-"Buen día, saluda ${CONFIG.centro}. Que tenga una excelente semana, el motivo del presente es para notificarle que su consulta se agendó para:
-*Fecha:* …
-*Hora:* …
-*Modalidad:* …
-*Paciente:* …
-*Motivo:* …
-*Abono:* $… dólares americanos
-*Por cancelar:* $… dólares americanos
-Gracias por su confianza, cualquier inquietud nos informa, su salud mental Ψ es nuestra prioridad, un excelente día."
-- Luego envía los datos para el abono, tal como los devuelve la herramienta (número de cuenta, cédula, titular, celular y correo; banco y tipo de cuenta solo si vienen). Pide que envíe el comprobante por este chat o al correo. Si necesita factura electrónica del SRI, pide nombres y apellidos, número de celular y correo electrónico.
-- Si el paciente envía una imagen o documento después de agendar, trátalo como comprobante: usa registrar_comprobante y dile que el centro lo verificará.
+- Cuando el paciente elija un horario y tengas todos los datos, usa agendar_cita. Eso RESERVA el horario; la cita aún NO está confirmada.
+- Después de reservar, dile que su horario quedó *reservado* (fecha, hora, paciente, valor y abono) y envía los datos para el abono tal como los devuelve la herramienta (número de cuenta, cédula, titular, celular y correo; banco y tipo de cuenta solo si vienen). Pide que envíe el comprobante por este chat dentro del plazo que indica la herramienta (horas_para_enviar_abono). Si necesita factura electrónica del SRI, pide nombres y apellidos, número de celular y correo electrónico.
+- Nunca digas que la cita está confirmada ni envíes la notificación de cita: el psicólogo verifica el abono con el banco y, al confirmarlo, el sistema le envía automáticamente la notificación y una imagen con los datos de su cita.
+- Si el paciente envía una imagen o documento después de reservar, trátalo como comprobante: usa registrar_comprobante y dile que se verificará con el banco y que recibirá la confirmación de su cita en cuanto esté verificado.
+- Si pregunta por el estado de su cita, usa ver_mis_citas.
 - Para reprogramar: cancela la cita anterior con cancelar_cita y agenda la nueva. Para consultar sus citas usa ver_mis_citas.
 
 LÍMITES IMPORTANTES
@@ -115,7 +107,7 @@ const HERRAMIENTAS = [
     },
     {
         name: 'agendar_cita',
-        description: 'Agenda la consulta en el horario elegido (debe venir de consultar_disponibilidad). Devuelve los datos para la notificación y los datos de pago.',
+        description: 'Reserva el horario elegido (debe venir de consultar_disponibilidad). La cita queda pendiente hasta que el centro verifique el abono. Devuelve los datos de la reserva y los datos de pago.',
         strict: true,
         input_schema: {
             type: 'object',

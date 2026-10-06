@@ -616,7 +616,7 @@ app.post('/api/pedidos', requiereSesion, (req, res) => {
 });
 
 // --- ASISTENTE VIRTUAL (WhatsApp, Messenger e Instagram con IA) ---
-require('./chatbot').montar(app, db);
+require('./chatbot').montar(app, db, { requiereAdmin });
 
 // Iniciar el servidor
 const servidor = app.listen(PORT, HOST, () => {

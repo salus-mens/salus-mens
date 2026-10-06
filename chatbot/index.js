@@ -3,12 +3,15 @@
 const agenda = require('./agenda');
 const asistente = require('./asistente');
 const canales = require('./canales');
+const panel = require('./panel');
 
-function montar(app, db) {
+// opciones.requiereAdmin: protección de server.js para el panel de citas
+function montar(app, db, opciones = {}) {
     const conGoogle = agenda.iniciar(db);
     const conIA = asistente.iniciar(db);
     canales.iniciar(db);
     app.use(canales.crearRutas());
+    app.use(panel.crearRutas(opciones.requiereAdmin));
 
     const estado = (activo) => (activo ? 'activo' : 'sin configurar');
     const modo = process.env.CHATBOT_MODO === 'menu' || !conIA ? 'menú automático (sin IA)' : 'IA con respaldo de menú';

@@ -28,6 +28,18 @@ Si la IA falla, te llega un correo de aviso, como máximo uno cada 6 horas. Para
 
 ---
 
+## Cómo se confirma una cita (verificación del abono)
+
+1. **El paciente elige un horario.** Queda **reservado** y recibe los datos para el abono del 50 %. Todavía **no** se le envía la confirmación.
+2. **El paciente envía el comprobante** por el chat. La reserva pasa a **"comprobante por verificar"** y te llega un correo con el enlace al panel.
+3. **Verificas el depósito en tu banco** y entras al panel **`/admin-citas`** (por ejemplo `http://127.0.0.1:5050/admin-citas`) con tu usuario `salus._mens`. Cada reserva tiene tres botones:
+   - **✓ Confirmar pago:** el paciente recibe el **mensaje de agendamiento** y una **imagen con los datos de su cita**, que puede descargar. En Google Calendar el evento pasa a verde.
+   - **Pago no válido:** se le pide que envíe de nuevo el comprobante. El horario sigue reservado.
+   - **Cancelar:** se libera el horario y se le avisa.
+4. **Si no envía el comprobante** en 24 horas (`horas_para_abono` en `chatbot/config.json`), la reserva **vence** y el horario se libera solo.
+
+**Ten en cuenta:** WhatsApp solo deja enviar mensajes libres hasta **24 horas después del último mensaje del paciente**. Confirma el pago dentro de ese plazo. Si pasa más tiempo, el panel te avisa que no se pudo enviar, y puedes usar **Abrir chat** para escribirle tú.
+
 ## 0. Datos del consultorio (sin programar)
 
 Abre [`chatbot/config.json`](../chatbot/config.json) y revisa:

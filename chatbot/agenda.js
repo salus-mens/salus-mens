@@ -2,6 +2,7 @@
 // Las citas se guardan siempre en la base de datos (tabla "citas").
 // Si Google Calendar está configurado (.env), además se consultan los eventos ocupados
 // del calendario del consultorio y cada cita se crea allí como evento.
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { JWT } = require('google-auth-library');
@@ -36,6 +37,9 @@ function iniciar(baseDeDatos) {
         creada TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+    if (!db.prepare('PRAGMA table_info(citas)').all().some((c) => c.name === 'token')) {
+        db.exec('ALTER TABLE citas ADD COLUMN token TEXT');
+    }
 
     const calendario = process.env.GOOGLE_CALENDAR_ID;
     const credencial = process.env.GOOGLE_SERVICE_ACCOUNT_FILE;
@@ -84,9 +88,23 @@ function fechaLegible(local) {
     return { fecha: `${DIAS[diaSemana(fecha)]} ${d} de ${MESES[m - 1]} de ${a}`, hora };
 }
 
+// --- Reservas sin abono: después de "horas_para_abono" se liberan solas ---
+function vencerReservas() {
+    const horas = CONFIG.horas_para_abono || 24;
+    const vencidas = db.prepare(`SELECT * FROM citas WHERE estado = 'abono_pendiente' AND creada < datetime('now', ?)`).all(`-${horas} hours`);
+    for (const cita of vencidas) {
+        db.prepare("UPDATE citas SET estado = 'vencida' WHERE id = ?").run(cita.id);
+        actualizarEvento(cita, null);
+    }
+    return vencidas;
+}
+
+const ACTIVAS = "estado NOT IN ('cancelada', 'vencida')";
+
 // --- Horarios ocupados: citas guardadas + eventos del Google Calendar ---
 async function ocupados(desdeMs, hastaMs) {
-    const lista = db.prepare("SELECT inicio, fin FROM citas WHERE estado != 'cancelada'").all()
+    vencerReservas();
+    const lista = db.prepare(`SELECT inicio, fin FROM citas WHERE ${ACTIVAS}`).all()
         .map((c) => [aMs(c.inicio), aMs(c.fin)]);
     if (google) {
         const { data } = await google.cliente.request({
@@ -175,17 +193,26 @@ function descripcionEvento(c) {
         `Celular / canal: ${c.celular || '-'} · ${c.conversacion}`,
         `Consulta: ${CONFIG.valores[c.tipo_consulta].nombre} · ${c.modalidad}`,
         `Motivo: ${c.motivo_area}${c.motivo_detalle ? ' — ' + c.motivo_detalle : ''}`,
-        `Valor: $${c.valor.toFixed(2)} · Abono 50 %: $${c.abono.toFixed(2)} · Estado: ${c.estado.replace('_', ' ')}`,
+        `Valor: $${c.valor.toFixed(2)} · Abono 50 %: $${c.abono.toFixed(2)} · Estado: ${ESTADOS[c.estado] || c.estado}`,
         '',
         'Agendada automáticamente por el asistente de WhatsApp de Salus Mens.'
     ].join('\n');
 }
 
-const TITULOS = {
-    abono_pendiente: 'ABONO PENDIENTE',
-    comprobante_recibido: 'COMPROBANTE POR VERIFICAR'
+const ESTADOS = {
+    abono_pendiente: 'reservada, abono pendiente',
+    comprobante_recibido: 'comprobante por verificar',
+    confirmada: 'confirmada (abono verificado)',
+    cancelada: 'cancelada',
+    vencida: 'vencida (no se recibió el abono)'
 };
+const TITULOS = {
+    abono_pendiente: 'RESERVA · ABONO PENDIENTE',
+    comprobante_recibido: 'RESERVA · COMPROBANTE POR VERIFICAR'
+};
+const COLORES = { abono_pendiente: '5', comprobante_recibido: '6', confirmada: '10' }; // amarillo, naranja, verde
 const tituloEvento = (c) => `Consulta: ${c.nombre}` + (TITULOS[c.estado] ? ` · ${TITULOS[c.estado]}` : '');
+const cambiosEvento = (c) => ({ summary: tituloEvento(c), description: descripcionEvento(c), colorId: COLORES[c.estado] });
 
 async function agendar(conversacion, datos) {
     const h = CONFIG.horario;
@@ -211,11 +238,12 @@ async function agendar(conversacion, datos) {
         fin: sumarMinutos(datos.inicio, h.duracion_minutos),
         valor: valor.valor,
         abono: Math.round(valor.valor * CONFIG.abono_porcentaje) / 100,
-        estado: 'abono_pendiente'
+        estado: 'abono_pendiente',
+        token: crypto.randomBytes(16).toString('hex')
     };
     const { lastInsertRowid } = db.prepare(`INSERT INTO citas
-        (conversacion, nombre, edad, celular, tipo_consulta, motivo_area, motivo_detalle, modalidad, inicio, fin, valor, abono, estado)
-        VALUES (@conversacion, @nombre, @edad, @celular, @tipo_consulta, @motivo_area, @motivo_detalle, @modalidad, @inicio, @fin, @valor, @abono, @estado)`)
+        (conversacion, nombre, edad, celular, tipo_consulta, motivo_area, motivo_detalle, modalidad, inicio, fin, valor, abono, estado, token)
+        VALUES (@conversacion, @nombre, @edad, @celular, @tipo_consulta, @motivo_area, @motivo_detalle, @modalidad, @inicio, @fin, @valor, @abono, @estado, @token)`)
         .run(cita);
     cita.id = Number(lastInsertRowid);
 
@@ -226,12 +254,10 @@ async function agendar(conversacion, datos) {
                 url: `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(google.calendario)}/events`,
                 method: 'POST',
                 data: {
-                    summary: tituloEvento(cita),
-                    description: descripcionEvento(cita),
+                    ...cambiosEvento(cita),
                     location: cita.modalidad === 'presencial' ? CONFIG.direccion : 'En línea',
                     start: { dateTime: aIso(cita.inicio), timeZone: ZONA },
-                    end: { dateTime: aIso(cita.fin), timeZone: ZONA },
-                    colorId: '5' // amarillo: pendiente de abono
+                    end: { dateTime: aIso(cita.fin), timeZone: ZONA }
                 }
             });
             db.prepare('UPDATE citas SET evento_google = ? WHERE id = ?').run(data.id, cita.id);
@@ -244,6 +270,8 @@ async function agendar(conversacion, datos) {
     const legible = fechaLegible(cita.inicio);
     return {
         cita_id: cita.id,
+        estado: 'Horario reservado. La cita se confirma cuando el centro verifique el abono con el banco.',
+        horas_para_enviar_abono: CONFIG.horas_para_abono || 24,
         fecha: legible.fecha,
         hora: legible.hora,
         modalidad: cita.modalidad,
@@ -261,8 +289,8 @@ async function agendar(conversacion, datos) {
 
 function citaDe(conversacion, citaId) {
     return citaId
-        ? db.prepare("SELECT * FROM citas WHERE id = ? AND conversacion = ? AND estado != 'cancelada'").get(citaId, conversacion)
-        : db.prepare("SELECT * FROM citas WHERE conversacion = ? AND estado != 'cancelada' ORDER BY id DESC").get(conversacion);
+        ? db.prepare(`SELECT * FROM citas WHERE id = ? AND conversacion = ? AND ${ACTIVAS}`).get(citaId, conversacion)
+        : db.prepare(`SELECT * FROM citas WHERE conversacion = ? AND ${ACTIVAS} ORDER BY id DESC`).get(conversacion);
 }
 
 async function actualizarEvento(cita, cambios) {
@@ -278,27 +306,66 @@ async function actualizarEvento(cita, cambios) {
     }
 }
 
+async function cambiarEstado(cita, estado) {
+    db.prepare('UPDATE citas SET estado = ? WHERE id = ?').run(estado, cita.id);
+    cita.estado = estado;
+    await actualizarEvento(cita, estado === 'cancelada' ? null : cambiosEvento(cita));
+    return cita;
+}
+
 async function registrarComprobante(conversacion, citaId) {
     const cita = citaDe(conversacion, citaId);
-    if (!cita) return { error: 'No encontré una cita activa de este paciente.' };
-    db.prepare("UPDATE citas SET estado = 'comprobante_recibido' WHERE id = ?").run(cita.id);
-    cita.estado = 'comprobante_recibido';
-    await actualizarEvento(cita, { summary: tituloEvento(cita), description: descripcionEvento(cita), colorId: '6' });
-    return { cita_id: cita.id, estado: 'Comprobante recibido; el centro lo verificará.', cita };
+    if (!cita) return { error: 'No encontré una reserva activa de este paciente.' };
+    if (cita.estado === 'confirmada') return { cita_id: cita.id, estado: 'Esta cita ya estaba confirmada.' };
+    await cambiarEstado(cita, 'comprobante_recibido');
+    return { cita_id: cita.id, estado: 'Comprobante recibido. El centro lo verificará con el banco y enviará la confirmación de la cita.', cita };
+}
+
+// --- Acciones del psicólogo desde el panel de citas ---
+const citaPorId = (id) => db.prepare('SELECT * FROM citas WHERE id = ?').get(id);
+const citaPorToken = (token) => (/^[a-f0-9]{32}$/.test(token) ? db.prepare(`SELECT * FROM citas WHERE token = ? AND estado = 'confirmada'`).get(token) : null);
+
+async function confirmarPago(id) {
+    const cita = citaPorId(id);
+    if (!cita || !['abono_pendiente', 'comprobante_recibido'].includes(cita.estado)) return { error: 'La cita no está pendiente de verificación.' };
+    return { cita: await cambiarEstado(cita, 'confirmada') };
+}
+
+async function pagoNoValido(id) {
+    const cita = citaPorId(id);
+    if (!cita || cita.estado !== 'comprobante_recibido') return { error: 'La cita no tiene un comprobante por verificar.' };
+    db.prepare("UPDATE citas SET creada = CURRENT_TIMESTAMP WHERE id = ?").run(cita.id); // nuevo plazo para el abono
+    return { cita: await cambiarEstado(cita, 'abono_pendiente') };
+}
+
+async function cancelarPorId(id) {
+    const cita = citaPorId(id);
+    if (!cita || ['cancelada', 'vencida'].includes(cita.estado)) return { error: 'La cita ya no está activa.' };
+    return { cita: await cambiarEstado(cita, 'cancelada') };
+}
+
+function listarParaPanel() {
+    vencerReservas();
+    return db.prepare(`SELECT * FROM citas WHERE ${ACTIVAS} AND fin >= ? ORDER BY
+        CASE estado WHEN 'comprobante_recibido' THEN 0 WHEN 'abono_pendiente' THEN 1 ELSE 2 END, inicio`).all(ahoraLocal())
+        .map((c) => ({ ...c, ...fechaLegible(c.inicio), estado_texto: ESTADOS[c.estado], consulta: CONFIG.valores[c.tipo_consulta].nombre }));
 }
 
 async function cancelar(conversacion, citaId) {
     const cita = citaDe(conversacion, citaId);
     if (!cita) return { error: 'No encontré una cita activa de este paciente.' };
-    db.prepare("UPDATE citas SET estado = 'cancelada' WHERE id = ?").run(cita.id);
-    await actualizarEvento(cita, null);
+    await cambiarEstado(cita, 'cancelada');
     return { cita_id: cita.id, cancelada: true, ...fechaLegible(cita.inicio), cita };
 }
 
 function citasActivas(conversacion) {
-    return db.prepare("SELECT id, inicio, modalidad, estado FROM citas WHERE conversacion = ? AND estado != 'cancelada' AND inicio >= ? ORDER BY inicio")
+    vencerReservas();
+    return db.prepare(`SELECT id, inicio, modalidad, estado FROM citas WHERE conversacion = ? AND ${ACTIVAS} AND inicio >= ? ORDER BY inicio`)
         .all(conversacion, ahoraLocal())
-        .map((c) => ({ cita_id: c.id, ...fechaLegible(c.inicio), modalidad: c.modalidad, estado: c.estado }));
+        .map((c) => ({ cita_id: c.id, ...fechaLegible(c.inicio), modalidad: c.modalidad, estado: ESTADOS[c.estado] }));
 }
 
-module.exports = { iniciar, disponibilidad, agendar, registrarComprobante, cancelar, citasActivas, ahoraLocal, fechaLegible, datosDePago, CONFIG };
+module.exports = {
+    iniciar, disponibilidad, agendar, registrarComprobante, cancelar, citasActivas, ahoraLocal, fechaLegible, datosDePago,
+    confirmarPago, pagoNoValido, cancelarPorId, listarParaPanel, citaPorId, citaPorToken, vencerReservas, CONFIG
+};

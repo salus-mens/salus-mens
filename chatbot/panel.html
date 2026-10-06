@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Citas | Panel · Salus Mens</title>
+    <link rel="icon" href="/Images/Logo.png">
+    <link rel="stylesheet" href="/styles/css/styles.css">
+    <script src="/scripts/tema.js"></script>
+    <style>
+        .citas { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; align-items: start; }
+        .cita { display: flex; flex-direction: column; gap: 6px; }
+        .cita h2 { margin: 0; font-size: 1.1rem; color: var(--titulo); }
+        .cita p { margin: 0; font-size: 0.88rem; line-height: 1.4; color: var(--texto); }
+        .cita .cuando { font-weight: 700; color: var(--texto-fuerte); }
+        .estado { align-self: flex-start; padding: 3px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+        .estado.comprobante_recibido { background: #f6c26b; color: #4a2f00; }
+        .estado.abono_pendiente { background: #f3e38a; color: #4a3f00; }
+        .estado.confirmada { background: #8fe0a8; color: #0d4a24; }
+        .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .acciones .boton { padding: 7px 14px; font-size: 0.8rem; }
+        .boton.gris { background: #8a9a96; }
+        .boton.rojo { background: #b3261e; }
+        .aviso { font-size: 0.8rem; font-weight: 700; color: var(--texto-fuerte); }
+        .vacio { text-align: center; }
+        .pie-pagina a { color: var(--titulo); font-weight: 700; }
+        .grupo { margin: 26px 0 12px; font-size: 1.1rem; color: var(--titulo); text-shadow: 0 0 2px var(--fondo-base), 0 0 10px var(--fondo-base); }
+    </style>
+</head>
+
+<body class="pagina-interna">
+    <main class="contenido-pagina">
+        <header class="encabezado-pagina">
+            <h1>CITAS</h1>
+            <p>Verifica el abono con el banco y confirma. Al confirmar, el paciente recibe el mensaje de agendamiento y la imagen de su cita.</p>
+        </header>
+        <div data-lista></div>
+        <p class="pie-pagina"><a href="/index.html">Volver a la página</a> · <a href="/api/salir">Cerrar sesión</a></p>
+    </main>
+
+    <script>
+        const lista = document.querySelector('[data-lista]');
+        const GRUPOS = [
+            ['comprobante_recibido', '1. Comprobantes por verificar'],
+            ['abono_pendiente', '2. Reservas esperando el abono'],
+            ['confirmada', '3. Citas confirmadas']
+        ];
+        const pesos = (n) => '$' + Number(n).toFixed(2);
+
+        function tarjeta(c) {
+            const art = document.createElement('article');
+            art.className = 'cita ventana tono-mint';
+            const linea = (clase, texto) => { const p = document.createElement('p'); if (clase) p.className = clase; p.textContent = texto; return p; };
+            const estado = document.createElement('span');
+            estado.className = 'estado ' + c.estado;
+            estado.textContent = c.estado_texto;
+            const titulo = document.createElement('h2');
+            titulo.textContent = `${c.nombre} (${c.edad} años)`;
+            art.append(estado, titulo,
+                linea('cuando', `${c.fecha[0].toUpperCase() + c.fecha.slice(1)} · ${c.hora} · ${c.modalidad}`),
+                linea('', `${c.consulta} · ${pesos(c.valor)} · abono ${pesos(c.abono)}`),
+                linea('', `Motivo: ${c.motivo}`),
+                linea('', `Canal: ${c.canal}`));
+
+            const acciones = document.createElement('div');
+            acciones.className = 'acciones';
+            const boton = (texto, clase, accion, pregunta) => {
+                const b = document.createElement('button');
+                b.type = 'button'; b.className = 'boton ' + clase; b.textContent = texto;
+                b.addEventListener('click', () => ejecutar(c, accion, pregunta, art));
+                acciones.appendChild(b);
+            };
+            const enlace = (texto, href) => {
+                const a = document.createElement('a');
+                a.className = 'boton gris'; a.textContent = texto; a.href = href; a.target = '_blank'; a.rel = 'noopener';
+                acciones.appendChild(a);
+            };
+            if (c.estado !== 'confirmada') boton('✓ Confirmar pago', '', 'confirmar', `¿Verificaste en el banco el abono de ${pesos(c.abono)} de ${c.nombre}? Se le enviará la confirmación de la cita.`);
+            if (c.estado === 'comprobante_recibido') boton('Pago no válido', 'gris', 'no-valido', 'Se pedirá al paciente que envíe nuevamente el comprobante. ¿Continuar?');
+            boton('Cancelar', 'rojo', 'cancelar', `¿Cancelar la cita de ${c.nombre}? El horario quedará libre y se le avisará.`);
+            if (c.chat) enlace('Abrir chat', c.chat);
+            if (c.imagen) enlace('Ver imagen', c.imagen);
+            art.appendChild(acciones);
+            return art;
+        }
+
+        async function ejecutar(c, accion, pregunta, art) {
+            if (!confirm(pregunta)) return;
+            art.querySelectorAll('button').forEach((b) => (b.disabled = true));
+            try {
+                const r = await fetch(`/api/citas/${c.id}/${accion}`, { method: 'POST' });
+                const datos = await r.json();
+                if (!r.ok) throw new Error(datos.error || 'Error');
+                alert('Listo. Aviso al paciente: ' + datos.aviso);
+            } catch (error) {
+                alert('No se pudo completar: ' + error.message);
+            }
+            cargar();
+        }
+
+        async function cargar() {
+            const r = await fetch('/api/citas');
+            if (r.redirected || !r.ok) { location.href = '/login.html?volver=/admin-citas'; return; }
+            const { citas } = await r.json();
+            lista.innerHTML = '';
+            if (!citas.length) {
+                const v = document.createElement('section');
+                v.className = 'ventana tono-mint vacio';
+                v.textContent = 'No hay citas próximas.';
+                lista.appendChild(v);
+                return;
+            }
+            for (const [estado, nombre] of GRUPOS) {
+                const delGrupo = citas.filter((c) => c.estado === estado);
+                if (!delGrupo.length) continue;
+                const h = document.createElement('h2');
+                h.className = 'grupo';
+                h.textContent = `${nombre} (${delGrupo.length})`;
+                const cont = document.createElement('div');
+                cont.className = 'citas';
+                delGrupo.forEach((c) => cont.appendChild(tarjeta(c)));
+                lista.append(h, cont);
+            }
+        }
+
+        cargar();
+        setInterval(cargar, 60000); // se actualiza cada minuto
+    </script>
+</body>
+
+</html>
