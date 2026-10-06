@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const express = require('express');
 const asistente = require('./asistente');
 const notificar = require('./notificar');
+const respuestas = require('./respuestas');
 
 const GRAPH = `https://graph.facebook.com/${process.env.META_GRAPH_VERSION || 'v23.0'}`;
 const PAUSA_MS = 12 * 60 * 60 * 1000; // si el psicólogo responde a mano, el asistente se calla 12 h con esa persona
@@ -15,6 +16,7 @@ let db = null;
 
 function iniciar(baseDeDatos) {
     db = baseDeDatos;
+    respuestas.iniciar(db);
     db.exec(`
       CREATE TABLE IF NOT EXISTS chatbot_procesados (id TEXT PRIMARY KEY, fecha INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS chatbot_pausas (conversacion TEXT PRIMARY KEY, hasta INTEGER NOT NULL);
@@ -120,7 +122,13 @@ async function llamarGraph(url, cuerpo, token) {
     if (!respuesta.ok) throw new Error(`Meta respondió ${respuesta.status}: ${await respuesta.text()}`);
 }
 
-async function enviar(canal, usuario, texto) {
+async function enviar(canal, usuario, contenido) {
+    // Puede llegar una lista de textos: se envían como mensajes separados, en orden
+    if (Array.isArray(contenido)) {
+        for (const texto of contenido) await enviar(canal, usuario, texto);
+        return;
+    }
+    const texto = respuestas.adaptar(contenido, canal);
     if (canal === 'whatsapp') {
         for (const parte of trozos(texto, 4000)) {
             await llamarGraph(`${GRAPH}/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
@@ -150,14 +158,28 @@ async function atender(m) {
     if (yaProcesado(m.id) || pausado(conversacion)) return;
     if (m.canal === 'whatsapp') marcarLeido(m.id);
     try {
-        const respuesta = await asistente.responder(m);
-        if (respuesta) await enviar(m.canal, m.usuario, respuesta);
+        await enviar(m.canal, m.usuario, await responderMensaje(m));
     } catch (error) {
-        console.error(`[Chatbot] Error con ${conversacion}:`, error.message);
-        notificar.derivacion({ motivo: `El asistente falló al responder: "${m.texto.slice(0, 200)}"`, urgente: false }, m);
-        enviar(m.canal, m.usuario, 'Gracias por escribirnos. En este momento no podemos responder automáticamente; el psicólogo se comunicará con usted lo antes posible. 🌻')
-            .catch((e) => console.error('[Chatbot] Tampoco se pudo enviar el aviso:', e.message));
+        console.error(`[Chatbot] No se pudo responder a ${conversacion}:`, error.message);
     }
+}
+
+// Con IA si está disponible; si no (o si falla, por ejemplo sin saldo), con el menú automático
+let ultimoAvisoFalla = 0;
+async function responderMensaje(m) {
+    if (process.env.CHATBOT_MODO !== 'menu' && asistente.activo()) {
+        try {
+            const respuesta = await asistente.responder(m);
+            if (respuesta) return respuesta;
+        } catch (error) {
+            console.error('[Chatbot] La IA falló, se usa el menú automático:', error.message);
+            if (Date.now() - ultimoAvisoFalla > 6 * 60 * 60 * 1000) { // como máximo un aviso cada 6 horas
+                ultimoAvisoFalla = Date.now();
+                notificar.derivacion({ motivo: `La IA no está respondiendo (${error.message.slice(0, 150)}). Mientras tanto se usan las respuestas automáticas del menú. Si es por saldo, recarga en console.anthropic.com → Billing.`, urgente: false }, m);
+            }
+        }
+    }
+    return respuestas.responder(m);
 }
 
 // --- Rutas ---
@@ -182,4 +204,4 @@ function crearRutas() {
     return rutas;
 }
 
-module.exports = { iniciar, crearRutas, leerAviso, trozos, firmaValida };
+module.exports = { iniciar, crearRutas, leerAviso, trozos, firmaValida, responderMensaje };

@@ -11,7 +11,8 @@ function montar(app, db) {
     app.use(canales.crearRutas());
 
     const estado = (activo) => (activo ? 'activo' : 'sin configurar');
-    console.log(`Asistente virtual · IA: ${estado(conIA)} · Google Calendar: ${estado(conGoogle)}`
+    const modo = process.env.CHATBOT_MODO === 'menu' || !conIA ? 'menú automático (sin IA)' : 'IA con respaldo de menú';
+    console.log(`Asistente virtual · Modo: ${modo} · IA: ${estado(conIA)} · Google Calendar: ${estado(conGoogle)}`
         + ` · WhatsApp: ${estado(process.env.WHATSAPP_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID)}`
         + ` · Messenger/Instagram: ${estado(process.env.META_PAGE_TOKEN || process.env.INSTAGRAM_TOKEN)}`);
 }

@@ -296,4 +296,6 @@ function responder({ canal, usuario, nombreContacto, texto }) {
     });
 }
 
-module.exports = { iniciar, responder, HERRAMIENTAS, instrucciones, ejecutar };
+const activo = () => Boolean(cliente);
+
+module.exports = { iniciar, activo, responder, HERRAMIENTAS, instrucciones, ejecutar };

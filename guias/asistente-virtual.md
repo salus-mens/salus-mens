@@ -9,6 +9,23 @@ El asistente responde con inteligencia artificial (Claude) los mensajes de **Wha
 
 Cada parte funciona por separado: puedes empezar por la IA, después Google Calendar y al final WhatsApp.
 
+### Sin IA: respuestas automáticas por menú (gratis)
+
+Si no hay clave de IA, si se acaba el saldo o si la IA falla, el asistente **sigue atendiendo** con tu mensaje de bienvenida y sus opciones 1 a 4:
+
+| El paciente escribe | El asistente responde |
+|---|---|
+| Cualquier mensaje | Bienvenida con el menú |
+| **1** o "servicios" | Cartera de servicios |
+| **2** o "precio", "pago", "factura" | Valores, abono del 50 %, datos de la cuenta y datos para factura SRI |
+| **3** o "cita", "agendar" | Agendamiento paso a paso: nombres, edad, motivo (áreas 1 a 5), detalle, mañana o tarde, **horarios libres numerados** (con **9** ve más fechas) y modalidad. Al final envía la notificación de cita y los datos de pago, y crea la cita en la agenda o en Google Calendar |
+| **4** o "hablar con el psicólogo" | Pide el mensaje y te lo envía por correo |
+| **0** o "menú" | Vuelve al menú |
+| Una imagen después de agendar | La registra como comprobante |
+| Palabras de crisis | Indica llamar al ECU 911 y te avisa como **URGENTE** |
+
+Si la IA falla, te llega un correo de aviso, como máximo uno cada 6 horas. Para usar **solo** el menú aunque tengas clave de IA, pon `CHATBOT_MODO=menu` en `.env`. Para probar el menú en la terminal, ejecuta `npm run chatbot -- --menu`.
+
 ---
 
 ## 0. Datos del consultorio (sin programar)
