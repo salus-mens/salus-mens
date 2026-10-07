@@ -616,7 +616,10 @@ app.post('/api/pedidos', requiereSesion, (req, res) => {
 });
 
 // --- ASISTENTE VIRTUAL (WhatsApp, Messenger e Instagram con IA) ---
-require('./chatbot').montar(app, db, { requiereAdmin });
+// Desactivado por ahora: para activarlo, poner CHATBOT_ACTIVO=true en .env (ver guias/asistente-virtual.md)
+if (process.env.CHATBOT_ACTIVO === 'true') {
+    require('./chatbot').montar(app, db, { requiereAdmin });
+}
 
 // Iniciar el servidor
 const servidor = app.listen(PORT, HOST, () => {
