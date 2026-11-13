@@ -16,3 +16,4 @@ google-cuenta-servicio.json
 # Cualquier archivo de claves (.env, APIKeys.env, etc.) nunca se sube a git
 *.env
 !.env.example
+servidor-web.log

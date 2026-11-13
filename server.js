@@ -99,6 +99,46 @@ function requiereSesion(req, res, next) {
 // Área exclusiva: solo se sirve con sesión iniciada (carpeta "privado", fuera de "public")
 app.use('/miembros', requiereSesion, express.static(path.join(__dirname, 'privado')));
 
+// --- INGRESO AL PANEL CON UN CLIC (desde la consola de Gnosis, X:\ChatBoot) ---
+// Gnosis firma un enlace con ACCESO_ADMIN_CLAVE (la misma en los dos .env). El enlace:
+//   - solo funciona desde esta misma computadora (127.0.0.1),
+//   - caduca en 2 minutos y se puede usar una sola vez.
+// Así no hace falta escribir la contraseña ni usar la terminal, y la página publicada no muestra ningún botón.
+const CLAVE_ACCESO_ADMIN = process.env.ACCESO_ADMIN_CLAVE || '';
+const accesosUsados = new Map(); // nonce -> expiración
+
+function esLocal(req) {
+    return ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
+}
+
+app.get('/acceso-admin', (req, res) => {
+    const negar = () => paginaRespuesta(res, 403, 'Enlace no válido',
+        'Este enlace de acceso no es válido o ya caducó. Vuelva a pulsar «Panel de la página web» en la consola de Gnosis.');
+
+    if (!CLAVE_ACCESO_ADMIN || !esLocal(req)) return negar();
+
+    const [expira, nonce, firma] = String(req.query.t || '').split('.');
+    const esperada = crypto.createHmac('sha256', CLAVE_ACCESO_ADMIN).update(`${expira}.${nonce}`).digest('hex');
+    const ahora = Date.now();
+    if (!firma || firma.length !== esperada.length
+        || !crypto.timingSafeEqual(Buffer.from(firma), Buffer.from(esperada))
+        || !(Number(expira) > ahora) || Number(expira) > ahora + 5 * 60 * 1000
+        || accesosUsados.has(nonce)) {
+        return negar();
+    }
+
+    for (const [clave, vence] of accesosUsados) if (vence < ahora) accesosUsados.delete(clave);
+    accesosUsados.set(nonce, Number(expira));
+
+    const admin = db.prepare('SELECT id FROM usuarios WHERE admin = 1 ORDER BY id LIMIT 1').get();
+    if (!admin) {
+        return paginaRespuesta(res, 404, 'Sin administrador', 'No hay ninguna cuenta con permiso de administrador.');
+    }
+
+    crearSesion(res, req, admin.id);
+    res.redirect(303, '/admin/');
+});
+
 // Datos de la sesión actual (para mostrar el nombre en el área exclusiva)
 app.get('/api/sesion', (req, res) => {
     const usuario = leerSesion(req);

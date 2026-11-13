@@ -3,14 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lista = nav && nav.querySelector('.menu-enlaces');
     if (!lista) return;
 
-    // La vista previa de VS Code sirve la carpeta del proyecto (las páginas quedan en /public/...)
-    // y no tiene el servidor: ADMIN se abre en el servidor local (npm start) en lugar de dar error.
-    if (location.pathname.startsWith('/public/')) {
-        lista.querySelectorAll('a[href="/admin/"]').forEach((enlace) => {
-            enlace.href = 'http://127.0.0.1:5050/admin/';
-        });
-    }
-
     // --- MENÚ DESLIZABLE EN MÓVILES ---
     // Cuando los enlaces no caben en la barra, muestra flechas para desplazarse entre las opciones.
 
