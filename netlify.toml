@@ -6,3 +6,10 @@
   base = "public"
   publish = "."
   command = ""
+
+# Chat de Gnosis: el navegador habla solo con este sitio; Netlify lo reenvía al servidor de Gnosis.
+[[redirects]]
+  from = "/gnosis/*"
+  to = "https://jd.tail0f4daf.ts.net/:splat"
+  status = 200
+  force = true
